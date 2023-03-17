@@ -8,7 +8,17 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 
+// pour l'héritage
+use Doctrine\ORM\Mapping\InheritanceType;
+use Doctrine\ORM\Mapping\DiscriminatorColumn;
+use Doctrine\ORM\Mapping\DiscriminatorMap;
+
+// ATTENTION!: format attributs PHP
 #[ORM\Entity(repositoryClass: UserRepository::class)]
+#[InheritanceType("SINGLE_TABLE")]
+#[DiscriminatorColumn(name: "discr", type: "string")]
+#[DiscriminatorMap(["user" => "User", "host" => "Host", "refugee" => "Refugee"])]
+
 #[UniqueEntity(fields: ['email'], message: 'There is already an account with this email')]
 class User implements UserInterface, PasswordAuthenticatedUserInterface
 {
