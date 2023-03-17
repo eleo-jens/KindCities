@@ -2,17 +2,19 @@
 
 namespace App\Controller;
 
+use App\Entity\Host;
 use App\Entity\User;
-use App\Form\RegistrationFormType;
+use App\Entity\Refugee;
 use App\Security\Authenticator;
+use App\Form\RegistrationFormType;
 use Doctrine\ORM\EntityManagerInterface;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\Security\Http\Authentication\UserAuthenticatorInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
+use Symfony\Component\Security\Http\Authentication\UserAuthenticatorInterface;
 
 class RegistrationController extends AbstractController
 {
@@ -20,17 +22,17 @@ class RegistrationController extends AbstractController
     public function register(Request $request, UserPasswordHasherInterface $userPasswordHasher, UserAuthenticatorInterface $userAuthenticator, Authenticator $authenticator, EntityManagerInterface $entityManager): Response
     {
 
-        if ($request->request->get('role') == "host") {
-        }
 
         
-        $user = new User();
+        if($request->request->all()['registration_form']['role'] == "refugee"){
+            $user = new Refugee();
+        }
+        else if ($request->request->all()['registration_form']['role'] == "host"){
+            $user = new Host();
+        }
+    
         $form = $this->createForm(RegistrationFormType::class, $user);
         $form->handleRequest($request);
-        
-        // if ($form->isSubmitted()) {
-        //     dd($request->request->all()['registration_form']['role']);
-        // }
         
         if ($form->isSubmitted() && $form->isValid()) {
             // encode the plain password

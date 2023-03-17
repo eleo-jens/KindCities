@@ -43,20 +43,7 @@ class RegistrationFormType extends AbstractType
                         'max' => 4096,
                     ]),
                 ],
-            ])
-            ->add(
-                'role',
-                ChoiceType::class,
-                [
-                    'choices' => [
-                        'Host' => 'host',
-                        'Refugee' => 'refugee'
-                    ],
-                    'expanded' => true,
-                    'multiple' => false,
-                    'mapped' => false
-                ],
-            );
+            ]);
     }
 
     public function configureOptions(OptionsResolver $resolver): void
