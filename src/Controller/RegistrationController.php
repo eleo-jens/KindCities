@@ -5,7 +5,9 @@ namespace App\Controller;
 use App\Entity\Host;
 use App\Entity\User;
 use App\Entity\Refugee;
+use App\Form\RegisterHostType;
 use App\Security\Authenticator;
+use App\Form\RegisterRefugeeType;
 use App\Form\RegistrationFormType;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
@@ -18,7 +20,12 @@ use Symfony\Component\Security\Http\Authentication\UserAuthenticatorInterface;
 
 class RegistrationController extends AbstractController
 {
-    #[Route('/register/{role}', name: 'app_register')]
+    #[Route('/register', name: 'show_register')]
+    public function showRegister(){
+        return $this->render('registration/showRegister.html.twig');
+    }
+
+    #[Route('/register/{role<refugee|host>}', name: 'app_register')]
     public function register(Request $request, UserPasswordHasherInterface $userPasswordHasher, UserAuthenticatorInterface $userAuthenticator, Authenticator $authenticator, EntityManagerInterface $entityManager): Response
     {
         if ($request->get('role') == "refugee"){
@@ -30,11 +37,11 @@ class RegistrationController extends AbstractController
             $form = $this->createForm(RegisterHostType::class, $user);
         }
 
+        dd($user);
+        
         $form->handleRequest($request);
         
         if ($form->isSubmitted() && $form->isValid()) {
-            
-  
 
             // encode the plain password
             $user->setPassword(

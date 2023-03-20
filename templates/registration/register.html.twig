@@ -3,15 +3,30 @@
 {% block title %}Register{% endblock %}
 
 {% block body %}
-    <h1>Register</h1>
+    <h1>Create an account</h1>
 
     {{ form_start(registrationForm) }}
+        {{ form_row(registrationForm.firstName) }}
+        {{ form_row(registrationForm.lastName) }}
+        {{ form_row(registrationForm.birthDate) }}
+        {{ form_row(registrationForm.phoneNumber) }}
+        {{ form_row(registrationForm.gender) }}
         {{ form_row(registrationForm.email) }}
         {{ form_row(registrationForm.plainPassword, {
             label: 'Password'
         }) }}
 
-        <fieldset>
+
+        {# {{ form_row(registrationForm.agreeTerms) }} #}
+
+        <button type="submit" class="btn">Register</button>
+    {{ form_end(registrationForm, { render_rest : false }) }}
+{% endblock %}
+
+
+{# Ceci n'est plus necessaire #}
+
+        {# <fieldset>
             <legend>I'm a:</legend>
             <div>
                 <input type="radio" id="refugee" name="role" value="refugee"
@@ -22,11 +37,4 @@
                 <input type="radio" id="host" name="role" value="host">
                 <label for="host">Host</label>
             </div>
-        </fieldset>
-
-
-        {{ form_row(registrationForm.agreeTerms) }}
-
-        <button type="submit" class="btn">Register</button>
-    {{ form_end(registrationForm) }}
-{% endblock %}
+        </fieldset> #}

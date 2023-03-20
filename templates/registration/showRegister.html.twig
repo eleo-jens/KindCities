@@ -1,0 +1,9 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Register{% endblock %}
+
+{% block body %}
+    <h1>Create an account</h1>
+    <div><a href=" {{ path('app_register', {'role' : 'refugee'}) }}">As a refugee</a></div>
+    <div><a href=" {{ path('app_register', {'role' : 'host'}) }}">As a host</a></div>
+{% endblock %}
