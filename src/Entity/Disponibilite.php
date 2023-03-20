@@ -24,6 +24,10 @@ class Disponibilite
     #[ORM\JoinColumn(nullable: false)]
     private ?Host $host = null;
 
+    #[ORM\ManyToOne(inversedBy: 'disponibilites')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?Service $service = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -61,6 +65,18 @@ class Disponibilite
     public function setHost(?Host $host): self
     {
         $this->host = $host;
+
+        return $this;
+    }
+
+    public function getService(): ?Service
+    {
+        return $this->service;
+    }
+
+    public function setService(?Service $service): self
+    {
+        $this->service = $service;
 
         return $this;
     }

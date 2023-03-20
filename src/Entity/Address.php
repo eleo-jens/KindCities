@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\AddressRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: AddressRepository::class)]
@@ -33,6 +35,18 @@ class Address
 
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $country = null;
+
+    #[ORM\ManyToMany(targetEntity: Host::class, mappedBy: 'addresses')]
+    private Collection $hosts;
+
+    #[ORM\ManyToMany(targetEntity: Service::class, inversedBy: 'addresses')]
+    private Collection $services;
+
+    public function __construct()
+    {
+        $this->hosts = new ArrayCollection();
+        $this->services = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -119,6 +133,57 @@ class Address
     public function setCountry(?string $country): self
     {
         $this->country = $country;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Host>
+     */
+    public function getHosts(): Collection
+    {
+        return $this->hosts;
+    }
+
+    public function addHost(Host $host): self
+    {
+        if (!$this->hosts->contains($host)) {
+            $this->hosts->add($host);
+            $host->addAddress($this);
+        }
+
+        return $this;
+    }
+
+    public function removeHost(Host $host): self
+    {
+        if ($this->hosts->removeElement($host)) {
+            $host->removeAddress($this);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Service>
+     */
+    public function getServices(): Collection
+    {
+        return $this->services;
+    }
+
+    public function addService(Service $service): self
+    {
+        if (!$this->services->contains($service)) {
+            $this->services->add($service);
+        }
+
+        return $this;
+    }
+
+    public function removeService(Service $service): self
+    {
+        $this->services->removeElement($service);
 
         return $this;
     }

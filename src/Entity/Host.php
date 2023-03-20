@@ -16,9 +16,13 @@ class Host extends User
     #[ORM\OneToMany(mappedBy: 'host', targetEntity: Disponibilite::class, orphanRemoval: true)]
     private Collection $disponibilites;
 
+    #[ORM\ManyToMany(targetEntity: Address::class, inversedBy: 'hosts')]
+    private Collection $addresses;
+
     public function __construct()
     {
         $this->disponibilites = new ArrayCollection();
+        $this->addresses = new ArrayCollection();
     }
 
     public function getNationalNumberId(): ?string
@@ -59,6 +63,30 @@ class Host extends User
                 $disponibilite->setHost(null);
             }
         }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Address>
+     */
+    public function getAddresses(): Collection
+    {
+        return $this->addresses;
+    }
+
+    public function addAddress(Address $address): self
+    {
+        if (!$this->addresses->contains($address)) {
+            $this->addresses->add($address);
+        }
+
+        return $this;
+    }
+
+    public function removeAddress(Address $address): self
+    {
+        $this->addresses->removeElement($address);
 
         return $this;
     }
