@@ -66,9 +66,13 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\OneToMany(mappedBy: 'user', targetEntity: Language::class)]
     private Collection $languages;
 
+    #[ORM\OneToMany(mappedBy: 'user', targetEntity: Complain::class, orphanRemoval: true)]
+    private Collection $complains;
+
     public function __construct()
     {
         $this->languages = new ArrayCollection();
+        $this->complains = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -249,6 +253,36 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
             // set the owning side to null (unless already changed)
             if ($language->getUser() === $this) {
                 $language->setUser(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Complain>
+     */
+    public function getComplains(): Collection
+    {
+        return $this->complains;
+    }
+
+    public function addComplain(Complain $complain): self
+    {
+        if (!$this->complains->contains($complain)) {
+            $this->complains->add($complain);
+            $complain->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeComplain(Complain $complain): self
+    {
+        if ($this->complains->removeElement($complain)) {
+            // set the owning side to null (unless already changed)
+            if ($complain->getUser() === $this) {
+                $complain->setUser(null);
             }
         }
 

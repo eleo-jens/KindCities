@@ -23,6 +23,10 @@ class Complain
     #[ORM\Column(type: Types::DATE_MUTABLE, nullable: true)]
     private ?\DateTimeInterface $dateComplain = null;
 
+    #[ORM\ManyToOne(inversedBy: 'complains')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?User $user = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -60,6 +64,18 @@ class Complain
     public function setDateComplain(?\DateTimeInterface $dateComplain): self
     {
         $this->dateComplain = $dateComplain;
+
+        return $this;
+    }
+
+    public function getUser(): ?User
+    {
+        return $this->user;
+    }
+
+    public function setUser(?User $user): self
+    {
+        $this->user = $user;
 
         return $this;
     }
