@@ -24,6 +24,10 @@ class Feedback
     #[ORM\JoinColumn(nullable: false)]
     private ?Refugee $refugee = null;
 
+    #[ORM\ManyToOne(inversedBy: 'feedbacks')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?Host $host = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -61,6 +65,18 @@ class Feedback
     public function setRefugee(?Refugee $refugee): self
     {
         $this->refugee = $refugee;
+
+        return $this;
+    }
+
+    public function getHost(): ?Host
+    {
+        return $this->host;
+    }
+
+    public function setHost(?Host $host): self
+    {
+        $this->host = $host;
 
         return $this;
     }

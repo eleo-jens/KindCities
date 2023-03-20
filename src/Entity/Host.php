@@ -22,11 +22,15 @@ class Host extends User
     #[ORM\OneToMany(mappedBy: 'host', targetEntity: Reservation::class, orphanRemoval: true)]
     private Collection $reservations;
 
+    #[ORM\OneToMany(mappedBy: 'host', targetEntity: Feedback::class, orphanRemoval: true)]
+    private Collection $feedbacks;
+
     public function __construct()
     {
         $this->disponibilites = new ArrayCollection();
         $this->addresses = new ArrayCollection();
         $this->reservations = new ArrayCollection();
+        $this->feedbacks = new ArrayCollection();
     }
 
     public function getNationalNumberId(): ?string
@@ -119,6 +123,36 @@ class Host extends User
             // set the owning side to null (unless already changed)
             if ($reservation->getHost() === $this) {
                 $reservation->setHost(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Feedback>
+     */
+    public function getFeedbacks(): Collection
+    {
+        return $this->feedbacks;
+    }
+
+    public function addFeedback(Feedback $feedback): self
+    {
+        if (!$this->feedbacks->contains($feedback)) {
+            $this->feedbacks->add($feedback);
+            $feedback->setHost($this);
+        }
+
+        return $this;
+    }
+
+    public function removeFeedback(Feedback $feedback): self
+    {
+        if ($this->feedbacks->removeElement($feedback)) {
+            // set the owning side to null (unless already changed)
+            if ($feedback->getHost() === $this) {
+                $feedback->setHost(null);
             }
         }
 
