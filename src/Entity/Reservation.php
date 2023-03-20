@@ -32,6 +32,10 @@ class Reservation
     #[ORM\JoinColumn(nullable: false)]
     private ?Host $host = null;
 
+    #[ORM\ManyToOne(inversedBy: 'reservations')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?Refugee $refugee = null;
+
     public function __construct()
     {
         $this->DetailsReservation = new ArrayCollection();
@@ -116,6 +120,18 @@ class Reservation
     public function setHost(?Host $host): self
     {
         $this->host = $host;
+
+        return $this;
+    }
+
+    public function getRefugee(): ?Refugee
+    {
+        return $this->refugee;
+    }
+
+    public function setRefugee(?Refugee $refugee): self
+    {
+        $this->refugee = $refugee;
 
         return $this;
     }
