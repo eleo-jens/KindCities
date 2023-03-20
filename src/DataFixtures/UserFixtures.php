@@ -39,7 +39,6 @@ class UserFixtures extends Fixture
             $host->setBirthDate($dateBirth);
             $host->setPassword($faker->password(8, 20));
             $host->setNationalNumberId("'". $dateBirth->format('Y-m-d H:i:s') . $i ."'");
-            // dd("test");
             
             $manager->persist($host);
         }
