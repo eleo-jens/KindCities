@@ -18,29 +18,23 @@ use Symfony\Component\Security\Http\Authentication\UserAuthenticatorInterface;
 
 class RegistrationController extends AbstractController
 {
-    #[Route('/register', name: 'app_register')]
+    #[Route('/register/{role}', name: 'app_register')]
     public function register(Request $request, UserPasswordHasherInterface $userPasswordHasher, UserAuthenticatorInterface $userAuthenticator, Authenticator $authenticator, EntityManagerInterface $entityManager): Response
     {
-
-
-        if ($request->isMethod('POST')) {
-            dd("post");
-        };
-
-        if($request->request->get('role') == "refugee"){
+        if ($request->get('role') == "refugee"){
             $user = new Refugee();
+            $form = $this->createForm(RegisterRefugeeType::class, $user);
         }
-        else if ($request->request->get('role') == "host"){
+        else if ($request->get('role') == "host"){
             $user = new Host();
+            $form = $this->createForm(RegisterHostType::class, $user);
         }
 
-        $user = new User();
-        $form = $this->createForm(RegistrationFormType::class, $user);
         $form->handleRequest($request);
         
         if ($form->isSubmitted() && $form->isValid()) {
-
-    
+            
+  
 
             // encode the plain password
             $user->setPassword(

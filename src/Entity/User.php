@@ -52,14 +52,14 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(type: Types::DATE_MUTABLE, nullable: true)]
     private ?\DateTimeInterface $birthDate = null;
 
-    #[ORM\Column(nullable: true)]
-    private ?bool $gender = null;
-
     #[ORM\Column(type: Types::TEXT, nullable: true)]
     private ?string $presentation = null;
 
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $picture = null;
+
+    #[ORM\Column(length: 30, nullable: true)]
+    private ?string $gender = null;
 
     public function getId(): ?int
     {
@@ -179,18 +179,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
-    public function isGender(): ?bool
-    {
-        return $this->gender;
-    }
-
-    public function setGender(?bool $gender): self
-    {
-        $this->gender = $gender;
-
-        return $this;
-    }
-
     public function getPresentation(): ?string
     {
         return $this->presentation;
@@ -211,6 +199,18 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function setPicture(?string $picture): self
     {
         $this->picture = $picture;
+
+        return $this;
+    }
+
+    public function getGender(): ?string
+    {
+        return $this->gender;
+    }
+
+    public function setGender(?string $gender): self
+    {
+        $this->gender = $gender;
 
         return $this;
     }
