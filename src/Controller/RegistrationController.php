@@ -23,18 +23,25 @@ class RegistrationController extends AbstractController
     {
 
 
-        
-        if($request->request->all()['registration_form']['role'] == "refugee"){
+        if ($request->isMethod('POST')) {
+            dd("post");
+        };
+
+        if($request->request->get('role') == "refugee"){
             $user = new Refugee();
         }
-        else if ($request->request->all()['registration_form']['role'] == "host"){
+        else if ($request->request->get('role') == "host"){
             $user = new Host();
         }
-    
+
+        $user = new User();
         $form = $this->createForm(RegistrationFormType::class, $user);
         $form->handleRequest($request);
         
         if ($form->isSubmitted() && $form->isValid()) {
+
+    
+
             // encode the plain password
             $user->setPassword(
                 $userPasswordHasher->hashPassword(
