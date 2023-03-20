@@ -23,7 +23,7 @@ use Doctrine\ORM\Mapping\DiscriminatorMap;
 #[DiscriminatorMap(["user" => "User", "host" => "Host", "refugee" => "Refugee"])]
 
 #[UniqueEntity(fields: ['email'], message: 'There is already an account with this email')]
-class User implements UserInterface, PasswordAuthenticatedUserInterface
+abstract class User implements UserInterface, PasswordAuthenticatedUserInterface
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
