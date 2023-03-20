@@ -31,6 +31,10 @@ class Service
     #[ORM\OneToMany(mappedBy: 'service', targetEntity: DetailReservation::class, orphanRemoval: true)]
     private Collection $DetailsReservation;
 
+    #[ORM\ManyToOne(inversedBy: 'services')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?Categorie $categorie = null;
+
     public function __construct()
     {
         $this->disponibilites = new ArrayCollection();
@@ -150,6 +154,18 @@ class Service
                 $detailsReservation->setService(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getCategorie(): ?Categorie
+    {
+        return $this->categorie;
+    }
+
+    public function setCategorie(?Categorie $categorie): self
+    {
+        $this->categorie = $categorie;
 
         return $this;
     }
