@@ -36,9 +36,13 @@ class Reservation
     #[ORM\JoinColumn(nullable: false)]
     private ?Refugee $refugee = null;
 
+    #[ORM\OneToMany(mappedBy: 'reservation', targetEntity: Feedback::class, orphanRemoval: true)]
+    private Collection $feedbacks;
+
     public function __construct()
     {
         $this->DetailsReservation = new ArrayCollection();
+        $this->feedbacks = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -132,6 +136,36 @@ class Reservation
     public function setRefugee(?Refugee $refugee): self
     {
         $this->refugee = $refugee;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Feedback>
+     */
+    public function getFeedbacks(): Collection
+    {
+        return $this->feedbacks;
+    }
+
+    public function addFeedback(Feedback $feedback): self
+    {
+        if (!$this->feedbacks->contains($feedback)) {
+            $this->feedbacks->add($feedback);
+            $feedback->setReservation($this);
+        }
+
+        return $this;
+    }
+
+    public function removeFeedback(Feedback $feedback): self
+    {
+        if ($this->feedbacks->removeElement($feedback)) {
+            // set the owning side to null (unless already changed)
+            if ($feedback->getReservation() === $this) {
+                $feedback->setReservation(null);
+            }
+        }
 
         return $this;
     }

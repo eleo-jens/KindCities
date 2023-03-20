@@ -28,6 +28,10 @@ class Feedback
     #[ORM\JoinColumn(nullable: false)]
     private ?Host $host = null;
 
+    #[ORM\ManyToOne(inversedBy: 'feedbacks')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?Reservation $reservation = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -77,6 +81,18 @@ class Feedback
     public function setHost(?Host $host): self
     {
         $this->host = $host;
+
+        return $this;
+    }
+
+    public function getReservation(): ?Reservation
+    {
+        return $this->reservation;
+    }
+
+    public function setReservation(?Reservation $reservation): self
+    {
+        $this->reservation = $reservation;
 
         return $this;
     }
