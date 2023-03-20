@@ -16,11 +16,16 @@
             label: 'Password'
         }) }}
 
+        {% if role == "host" %}
+            {{ form_row(registrationForm.nationalNumberId) }}
+        {% elseif role == "refugee" %}
+            {{ form_row(registrationForm.status) }}
+        {% endif %}
 
         {# {{ form_row(registrationForm.agreeTerms) }} #}
 
         <button type="submit" class="btn">Register</button>
-    {{ form_end(registrationForm, { render_rest : false }) }}
+    {{ form_end(registrationForm) }}
 {% endblock %}
 
 

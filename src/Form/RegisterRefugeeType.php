@@ -26,6 +26,7 @@ class RegisterRefugeeType extends AbstractType
             ->add('firstName')
             ->add('phoneNumber', TelType::class)
             ->add('birthDate', DateType::class)
+            ->add('status')
             ->add('gender', 
                 ChoiceType::class,
                     [

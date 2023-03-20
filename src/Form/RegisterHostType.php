@@ -24,6 +24,7 @@ class RegisterHostType extends AbstractType
         ->add('firstName')
         ->add('phoneNumber', TelType::class)
         ->add('birthDate', DateType::class)
+        ->add('nationalNumberId')
         ->add('gender', 
         ChoiceType::class,
             [

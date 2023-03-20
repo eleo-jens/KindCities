@@ -37,11 +37,14 @@ class RegistrationController extends AbstractController
             $form = $this->createForm(RegisterHostType::class, $user);
         }
 
-        dd($user);
-        
+
+        // dd($user);
+
         $form->handleRequest($request);
         
-        if ($form->isSubmitted() && $form->isValid()) {
+        if ($form->isSubmitted()) {
+            
+            // dd($form->getErrors());
 
             // encode the plain password
             $user->setPassword(
@@ -62,8 +65,11 @@ class RegistrationController extends AbstractController
             );
         }
 
-        return $this->render('registration/register.html.twig', [
+        $vars = [
             'registrationForm' => $form->createView(),
-        ]);
+            'role' => $request->get('role')
+        ];
+
+        return $this->render('registration/register.html.twig', $vars);
     }
 }
