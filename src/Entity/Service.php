@@ -28,10 +28,14 @@ class Service
     #[ORM\ManyToMany(targetEntity: Address::class, mappedBy: 'services')]
     private Collection $addresses;
 
+    #[ORM\OneToMany(mappedBy: 'service', targetEntity: DetailReservation::class, orphanRemoval: true)]
+    private Collection $DetailsReservation;
+
     public function __construct()
     {
         $this->disponibilites = new ArrayCollection();
         $this->addresses = new ArrayCollection();
+        $this->DetailsReservation = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -115,6 +119,36 @@ class Service
     {
         if ($this->addresses->removeElement($address)) {
             $address->removeService($this);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, DetailReservation>
+     */
+    public function getDetailsReservation(): Collection
+    {
+        return $this->DetailsReservation;
+    }
+
+    public function addDetailsReservation(DetailReservation $detailsReservation): self
+    {
+        if (!$this->DetailsReservation->contains($detailsReservation)) {
+            $this->DetailsReservation->add($detailsReservation);
+            $detailsReservation->setService($this);
+        }
+
+        return $this;
+    }
+
+    public function removeDetailsReservation(DetailReservation $detailsReservation): self
+    {
+        if ($this->DetailsReservation->removeElement($detailsReservation)) {
+            // set the owning side to null (unless already changed)
+            if ($detailsReservation->getService() === $this) {
+                $detailsReservation->setService(null);
+            }
         }
 
         return $this;
