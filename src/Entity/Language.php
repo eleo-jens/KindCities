@@ -2,11 +2,11 @@
 
 namespace App\Entity;
 
-use App\Repository\LanguagesRepository;
+use App\Repository\LanguageRepository;
 use Doctrine\ORM\Mapping as ORM;
 
-#[ORM\Entity(repositoryClass: LanguagesRepository::class)]
-class Languages
+#[ORM\Entity(repositoryClass: LanguageRepository::class)]
+class Language
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
