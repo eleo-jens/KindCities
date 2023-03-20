@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\UserRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
@@ -60,6 +62,14 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     #[ORM\Column(length: 30, nullable: true)]
     private ?string $gender = null;
+
+    #[ORM\OneToMany(mappedBy: 'user', targetEntity: Language::class)]
+    private Collection $languages;
+
+    public function __construct()
+    {
+        $this->languages = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -211,6 +221,36 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function setGender(?string $gender): self
     {
         $this->gender = $gender;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Language>
+     */
+    public function getLanguages(): Collection
+    {
+        return $this->languages;
+    }
+
+    public function addLanguage(Language $language): self
+    {
+        if (!$this->languages->contains($language)) {
+            $this->languages->add($language);
+            $language->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeLanguage(Language $language): self
+    {
+        if ($this->languages->removeElement($language)) {
+            // set the owning side to null (unless already changed)
+            if ($language->getUser() === $this) {
+                $language->setUser(null);
+            }
+        }
 
         return $this;
     }
