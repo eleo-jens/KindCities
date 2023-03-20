@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\ReservationRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -22,6 +24,14 @@ class Reservation
 
     #[ORM\Column(type: Types::TEXT, nullable: true)]
     private ?string $resume = null;
+
+    #[ORM\OneToMany(mappedBy: 'reservation', targetEntity: DetailReservation::class, orphanRemoval: true)]
+    private Collection $DetailsReservation;
+
+    public function __construct()
+    {
+        $this->DetailsReservation = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -60,6 +70,36 @@ class Reservation
     public function setResume(?string $resume): self
     {
         $this->resume = $resume;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, DetailReservation>
+     */
+    public function getDetailsReservation(): Collection
+    {
+        return $this->DetailsReservation;
+    }
+
+    public function addDetailsReservation(DetailReservation $detailsReservation): self
+    {
+        if (!$this->DetailsReservation->contains($detailsReservation)) {
+            $this->DetailsReservation->add($detailsReservation);
+            $detailsReservation->setReservation($this);
+        }
+
+        return $this;
+    }
+
+    public function removeDetailsReservation(DetailReservation $detailsReservation): self
+    {
+        if ($this->DetailsReservation->removeElement($detailsReservation)) {
+            // set the owning side to null (unless already changed)
+            if ($detailsReservation->getReservation() === $this) {
+                $detailsReservation->setReservation(null);
+            }
+        }
 
         return $this;
     }
