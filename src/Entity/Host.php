@@ -19,10 +19,14 @@ class Host extends User
     #[ORM\ManyToMany(targetEntity: Address::class, inversedBy: 'hosts')]
     private Collection $addresses;
 
+    #[ORM\OneToMany(mappedBy: 'host', targetEntity: Reservation::class, orphanRemoval: true)]
+    private Collection $reservations;
+
     public function __construct()
     {
         $this->disponibilites = new ArrayCollection();
         $this->addresses = new ArrayCollection();
+        $this->reservations = new ArrayCollection();
     }
 
     public function getNationalNumberId(): ?string
@@ -87,6 +91,36 @@ class Host extends User
     public function removeAddress(Address $address): self
     {
         $this->addresses->removeElement($address);
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Reservation>
+     */
+    public function getReservations(): Collection
+    {
+        return $this->reservations;
+    }
+
+    public function addReservation(Reservation $reservation): self
+    {
+        if (!$this->reservations->contains($reservation)) {
+            $this->reservations->add($reservation);
+            $reservation->setHost($this);
+        }
+
+        return $this;
+    }
+
+    public function removeReservation(Reservation $reservation): self
+    {
+        if ($this->reservations->removeElement($reservation)) {
+            // set the owning side to null (unless already changed)
+            if ($reservation->getHost() === $this) {
+                $reservation->setHost(null);
+            }
+        }
 
         return $this;
     }

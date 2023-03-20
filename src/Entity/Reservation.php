@@ -28,6 +28,10 @@ class Reservation
     #[ORM\OneToMany(mappedBy: 'reservation', targetEntity: DetailReservation::class, orphanRemoval: true)]
     private Collection $DetailsReservation;
 
+    #[ORM\ManyToOne(inversedBy: 'reservations')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?Host $host = null;
+
     public function __construct()
     {
         $this->DetailsReservation = new ArrayCollection();
@@ -100,6 +104,18 @@ class Reservation
                 $detailsReservation->setReservation(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getHost(): ?Host
+    {
+        return $this->host;
+    }
+
+    public function setHost(?Host $host): self
+    {
+        $this->host = $host;
 
         return $this;
     }
