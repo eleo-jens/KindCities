@@ -20,6 +20,10 @@ class Feedback
     #[ORM\Column(type: Types::TEXT, nullable: true)]
     private ?string $comment = null;
 
+    #[ORM\ManyToOne(inversedBy: 'feedbacks')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?Refugee $refugee = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -45,6 +49,18 @@ class Feedback
     public function setComment(?string $comment): self
     {
         $this->comment = $comment;
+
+        return $this;
+    }
+
+    public function getRefugee(): ?Refugee
+    {
+        return $this->refugee;
+    }
+
+    public function setRefugee(?Refugee $refugee): self
+    {
+        $this->refugee = $refugee;
 
         return $this;
     }
