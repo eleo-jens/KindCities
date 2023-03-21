@@ -4,9 +4,11 @@ namespace App\DataFixtures;
 
 use App\Entity\Host;
 use App\Entity\Address;
+use Doctrine\ORM\Mapping\Id;
+use App\DataFixtures\UserFixtures;
+use App\DataFixtures\AddressFixtures;
 use Doctrine\Persistence\ObjectManager;
 use Doctrine\Bundle\FixturesBundle\Fixture;
-use Doctrine\ORM\Mapping\Id;
 
 class HostAddressFixtures extends Fixture
 {
@@ -16,14 +18,24 @@ class HostAddressFixtures extends Fixture
         $addresses = $manager->getRepository(Address::class)->findAll();
         $hosts = $manager->getRepository(Host::class)->findAll();
 
+        // dump($addresses);
+        dd($hosts); 
+        
         // création de HostAddress
         foreach ($hosts as $key => $host){
-            dd($hosts); 
             $addressRandom = $addresses[array_rand($addresses)];
             $host->addAddress($addressRandom);
             $manager->persist($host);
         }
 
         $manager->flush();
+    }
+
+    public function getDependencies()
+    {
+        return ([
+            UserFixtures::class,
+            AddressFixtures::class
+        ]);
     }
 }
