@@ -63,16 +63,16 @@ abstract class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(length: 30, nullable: true)]
     private ?string $gender = null;
 
-    #[ORM\OneToMany(mappedBy: 'user', targetEntity: Language::class)]
-    private Collection $languages;
-
     #[ORM\OneToMany(mappedBy: 'user', targetEntity: Complain::class, orphanRemoval: true)]
     private Collection $complains;
 
+    #[ORM\ManyToMany(targetEntity: Language::class, mappedBy: 'users')]
+    private Collection $languages;
+
     public function __construct()
     {
-        $this->languages = new ArrayCollection();
         $this->complains = new ArrayCollection();
+        $this->languages = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -230,36 +230,6 @@ abstract class User implements UserInterface, PasswordAuthenticatedUserInterface
     }
 
     /**
-     * @return Collection<int, Language>
-     */
-    public function getLanguages(): Collection
-    {
-        return $this->languages;
-    }
-
-    public function addLanguage(Language $language): self
-    {
-        if (!$this->languages->contains($language)) {
-            $this->languages->add($language);
-            $language->setUser($this);
-        }
-
-        return $this;
-    }
-
-    public function removeLanguage(Language $language): self
-    {
-        if ($this->languages->removeElement($language)) {
-            // set the owning side to null (unless already changed)
-            if ($language->getUser() === $this) {
-                $language->setUser(null);
-            }
-        }
-
-        return $this;
-    }
-
-    /**
      * @return Collection<int, Complain>
      */
     public function getComplains(): Collection
@@ -284,6 +254,33 @@ abstract class User implements UserInterface, PasswordAuthenticatedUserInterface
             if ($complain->getUser() === $this) {
                 $complain->setUser(null);
             }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Language>
+     */
+    public function getLanguages(): Collection
+    {
+        return $this->languages;
+    }
+
+    public function addLanguage(Language $language): self
+    {
+        if (!$this->languages->contains($language)) {
+            $this->languages->add($language);
+            $language->addUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeLanguage(Language $language): self
+    {
+        if ($this->languages->removeElement($language)) {
+            $language->removeUser($this);
         }
 
         return $this;

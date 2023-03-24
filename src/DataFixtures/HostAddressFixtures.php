@@ -19,8 +19,7 @@ class HostAddressFixtures extends Fixture implements DependentFixtureInterface
 
         $addresses = $manager->getRepository(Address::class)->findAll();
         $hosts = $manager->getRepository(Host::class)->findAll();
-        $users = $manager->getRepository(User::class)->findAll();
-
+      
         // dump($addresses);
         // dump($users); 
         // dd($hosts); 
