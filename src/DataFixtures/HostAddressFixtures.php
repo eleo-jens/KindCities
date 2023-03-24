@@ -10,8 +10,9 @@ use App\DataFixtures\UserFixtures;
 use App\DataFixtures\AddressFixtures;
 use Doctrine\Persistence\ObjectManager;
 use Doctrine\Bundle\FixturesBundle\Fixture;
+use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 
-class HostAddressFixtures extends Fixture
+class HostAddressFixtures extends Fixture implements DependentFixtureInterface
 {
     public function load(ObjectManager $manager): void
     {
@@ -21,14 +22,20 @@ class HostAddressFixtures extends Fixture
         $users = $manager->getRepository(User::class)->findAll();
 
         // dump($addresses);
-        dump($users); 
-        dd($hosts); 
+        // dump($users); 
+        // dd($hosts); 
         
         // création de HostAddress
-        foreach ($hosts as $key => $host){
-            $addressRandom = $addresses[array_rand($addresses)];
-            $host->addAddress($addressRandom);
-            $manager->persist($host);
+        // foreach ($hosts as $key => $host){
+        //     $addressRandom = $addresses[array_rand($addresses)];
+        //     $host->addAddress($addressRandom);
+        //     $manager->persist($host);
+        // }
+
+        foreach ($addresses as $key => $address){
+            $hostRandom = $hosts[array_rand($hosts)];
+            $address->addHost($hostRandom);
+            $manager->persist($address);
         }
 
         $manager->flush();
