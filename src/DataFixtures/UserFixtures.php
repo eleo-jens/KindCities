@@ -24,6 +24,7 @@ class UserFixtures extends Fixture
             $refugee->setBirthDate($faker->dateTime());
             $refugee->setPassword($faker->password(8, 20));
             $refugee->setStatus($faker->sentence());
+            $refugee->setRoles(["ROLE_REFUGEE"]);
             
             $manager->persist($refugee);
         }
@@ -39,6 +40,7 @@ class UserFixtures extends Fixture
             $host->setBirthDate($dateBirth);
             $host->setPassword($faker->password(8, 20));
             $host->setNationalNumberId("'". $dateBirth->format('Y-m-d H:i:s') . $i ."'");
+            $refugee->setRoles(["ROLE_HOST"]);
             
             $manager->persist($host);
         }

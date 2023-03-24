@@ -102,6 +102,8 @@ abstract class User implements UserInterface, PasswordAuthenticatedUserInterface
         return (string) $this->email;
     }
 
+
+    // comment lors de la création d'un host ou d'un refugee je peux fixer la valeur ROLE_HOST ou ROLE_REFUGEE
     /**
      * @see UserInterface
      */
