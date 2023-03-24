@@ -1,0 +1,11 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Hello HostController!{% endblock %}
+
+{% block body %}
+<div class="example-wrapper">
+    <h1>Hello, {{ app.user.firstname }}</h1>
+
+    <div><a href=" {{ path('create_service') }}">Offer a new service</a></div>
+</div>
+{% endblock %}

@@ -1,0 +1,12 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Hello RefugeeController!{% endblock %}
+
+{% block body %}
+<div class="example-wrapper">
+    <h1>Hello, {{ app.user.firstname }}</h1>
+
+    <div><a href=" {{ path('search_service') }}">Find a service</a></div>
+</div>
+</div>
+{% endblock %}

@@ -8,6 +8,7 @@ use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 class ServiceController extends AbstractController
@@ -22,6 +23,7 @@ class ServiceController extends AbstractController
     }
 
     // Page pour créer un service
+    #[IsGranted('ROLE_HOST')]
     #[Route('/service/create/', name: 'create_service')]
     public function create(Request $req, ManagerRegistry $doctrine): Response
     {
