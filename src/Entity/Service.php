@@ -32,7 +32,7 @@ class Service
     private Collection $DetailsReservation;
 
     #[ORM\ManyToOne(inversedBy: 'services')]
-    #[ORM\JoinColumn(nullable: false)]
+    #[ORM\JoinColumn(nullable: true)]
     private ?Categorie $categorie = null;
 
     public function __construct()

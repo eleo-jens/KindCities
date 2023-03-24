@@ -1,0 +1,18 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}KindCities | Services for Refugees
+{% endblock %}
+
+{% block body %}
+	<h1>Offer a new service</h1>
+	<h2>Please fill the following information about your service.</h2>
+	
+	{{ form_start (formulaire, 
+		{ 'action' : path('create_service')})
+	}}
+	{{ form_widget (formulaire) }}
+
+	<input type="submit" value="Post a new service">
+
+	{{ form_end(formulaire, {render_rest:false}) }}
+{% endblock %}
