@@ -19,9 +19,15 @@ class ServiceType extends AbstractType
         $builder
             ->add('name')
             ->add('description', TextareaType::class)
-            // ->add('addresses', EntityType::class, ['class' => Address::class])
-            ->add('categorie', EntityType::class, ['class' => Categorie::class,
-                                                    'choice_label' => 'name']);
+            ->add('categorie', EntityType::class, [
+                'class' => Categorie::class,
+                'choice_label' => 'name'
+            ])
+            // drop down menu avec les adresses du host
+            ->add('address', EntityType::class, [
+                'class' => Address::class,
+                'choice_label' => 'street'
+            ]);
     }
 
     public function configureOptions(OptionsResolver $resolver): void

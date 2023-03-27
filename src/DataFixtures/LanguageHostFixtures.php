@@ -26,7 +26,6 @@ class LanguageHostFixtures extends Fixture implements DependentFixtureInterface
             }
             $manager->persist($user);
         }
-
         $manager->flush();
     }
 

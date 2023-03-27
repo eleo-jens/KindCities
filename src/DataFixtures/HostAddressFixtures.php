@@ -19,17 +19,6 @@ class HostAddressFixtures extends Fixture implements DependentFixtureInterface
 
         $addresses = $manager->getRepository(Address::class)->findAll();
         $hosts = $manager->getRepository(Host::class)->findAll();
-      
-        // dump($addresses);
-        // dump($users); 
-        // dd($hosts); 
-        
-        // création de HostAddress
-        // foreach ($hosts as $key => $host){
-        //     $addressRandom = $addresses[array_rand($addresses)];
-        //     $host->addAddress($addressRandom);
-        //     $manager->persist($host);
-        // }
 
         foreach ($addresses as $key => $address){
             $hostRandom = $hosts[array_rand($hosts)];
