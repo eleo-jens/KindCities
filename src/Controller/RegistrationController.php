@@ -30,14 +30,14 @@ class RegistrationController extends AbstractController
     {
         if ($request->get('role') == "refugee"){
             $user = new Refugee();
+            $user->setRoles(["ROLE_REFUGEE"]);
             $form = $this->createForm(RegisterRefugeeType::class, $user);
         }
         else if ($request->get('role') == "host"){
             $user = new Host();
+            $user->setRoles(["ROLE_HOST"]);
             $form = $this->createForm(RegisterHostType::class, $user);
         }
-
-
         // dd($user);
 
         $form->handleRequest($request);
