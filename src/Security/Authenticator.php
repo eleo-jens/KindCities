@@ -48,10 +48,9 @@ class Authenticator extends AbstractLoginFormAuthenticator
         if ($targetPath = $this->getTargetPath($request->getSession(), $firewallName)) {
             return new RedirectResponse($targetPath);
         }
-
-        //ICI je veux gérer la redirection en fonction du role: host -> app_host et refugee -> app_refugee mais comment ?
+        
         // For example:
-        return new RedirectResponse($this->urlGenerator->generate('app_host'));
+        return new RedirectResponse($this->urlGenerator->generate('app_home'));
         // throw new \Exception('TODO: provide a valid redirect inside '.__FILE__);
     }
 

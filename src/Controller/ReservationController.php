@@ -18,6 +18,8 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 class ReservationController extends AbstractController
 {
+
+    // CECI EST JUSTE UN TEST EN DUR
     #[Route('/reservation', name: 'app_reservation')]
     public function index(EntityManagerInterface $em): Response
     {

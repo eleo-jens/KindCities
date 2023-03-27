@@ -35,7 +35,6 @@ class UserFixtures extends Fixture
             $refugee->setFirstName($firstname);
             $refugee->setPhoneNumber($faker->phoneNumber());
             $refugee->setBirthDate($faker->dateTime());
-            // $refugee->setPassword("test1234");
             $refugee->setPassword($this->passwordHasher->hashPassword(
                 $refugee,
                 'test1234'
@@ -52,13 +51,13 @@ class UserFixtures extends Fixture
             $dateBirth = $faker->dateTime(); 
 
             $host = new Host(); 
-            $host->setEmail("" . $firstname . "." . $lastname . "@gmail.com");
+            // $host->setEmail("" . $firstname . "." . $lastname . "@gmail.com");
+            $host->setEmail("host" . $i . "@gmail.com");
             $host->setGender($faker->randomElement(['woman', 'man', 'non-binary', 'other']));
             $host->setLastName($lastname);
             $host->setFirstName($firstname);
             $host->setPhoneNumber($faker->phoneNumber());
             $host->setBirthDate($dateBirth);
-            $host->setPassword("test1234");
             $host->setPassword($this->passwordHasher->hashPassword(
                 $host,
                 'test1234'
