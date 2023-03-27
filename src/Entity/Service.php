@@ -25,9 +25,6 @@ class Service
     #[ORM\OneToMany(mappedBy: 'service', targetEntity: Disponibilite::class, orphanRemoval: true)]
     private Collection $disponibilites;
 
-    #[ORM\ManyToMany(targetEntity: Address::class, mappedBy: 'services')]
-    private Collection $addresses;
-
     #[ORM\OneToMany(mappedBy: 'service', targetEntity: DetailReservation::class, orphanRemoval: true)]
     private Collection $DetailsReservation;
 
@@ -38,7 +35,6 @@ class Service
     public function __construct()
     {
         $this->disponibilites = new ArrayCollection();
-        $this->addresses = new ArrayCollection();
         $this->DetailsReservation = new ArrayCollection();
     }
 
@@ -96,33 +92,6 @@ class Service
             if ($disponibilite->getService() === $this) {
                 $disponibilite->setService(null);
             }
-        }
-
-        return $this;
-    }
-
-    /**
-     * @return Collection<int, Address>
-     */
-    public function getAddresses(): Collection
-    {
-        return $this->addresses;
-    }
-
-    public function addAddress(Address $address): self
-    {
-        if (!$this->addresses->contains($address)) {
-            $this->addresses->add($address);
-            $address->addService($this);
-        }
-
-        return $this;
-    }
-
-    public function removeAddress(Address $address): self
-    {
-        if ($this->addresses->removeElement($address)) {
-            $address->removeService($this);
         }
 
         return $this;

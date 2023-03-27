@@ -39,13 +39,9 @@ class Address
     #[ORM\ManyToMany(targetEntity: Host::class, mappedBy: 'addresses')]
     private Collection $hosts;
 
-    #[ORM\ManyToMany(targetEntity: Service::class, inversedBy: 'addresses')]
-    private Collection $services;
-
     public function __construct()
     {
         $this->hosts = new ArrayCollection();
-        $this->services = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -160,30 +156,6 @@ class Address
         if ($this->hosts->removeElement($host)) {
             $host->removeAddress($this);
         }
-
-        return $this;
-    }
-
-    /**
-     * @return Collection<int, Service>
-     */
-    public function getServices(): Collection
-    {
-        return $this->services;
-    }
-
-    public function addService(Service $service): self
-    {
-        if (!$this->services->contains($service)) {
-            $this->services->add($service);
-        }
-
-        return $this;
-    }
-
-    public function removeService(Service $service): self
-    {
-        $this->services->removeElement($service);
 
         return $this;
     }
