@@ -10,8 +10,12 @@ use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\Serializer\SerializerInterface;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
+use Symfony\Component\Serializer\Normalizer\AbstractNormalizer;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+
 
 class ServiceController extends AbstractController
 {
@@ -51,20 +55,29 @@ class ServiceController extends AbstractController
     }
 
     #[Route ("serice/create/add/address", name: "add_address")]
-    public function addAddressService(Request $ajaxRequest){
+    public function addAddressService(Request $ajaxRequest, ManagerRegistry $doctrine, SerializerInterface $serialiser){
         
         // créer une nouvelle Address
         // renvoyer l'id ? L'ajouter dans le service ?
-        
-        $street = $ajaxRequest->get('street');
+
+        // dd($ajaxRequest->get('address'));
+        $address = $ajaxRequest->get('address');
+
+        $newAddress = new Address($address);
+        $newAddress->addHost($this->getUser());
+        $em = $doctrine->getManager();
+        $em->persist($newAddress);
+        $em->flush();
 
         // retourner une reponse Json
-        //return new JsonResponse();
+        $json = $serialiser->serialize($newAddress,'json',[AbstractNormalizer::IGNORED_ATTRIBUTES => ['hosts','services']]);
+        
+        return new JsonResponse($json);
 
     }
 
     // page de recherche d'un service
-        #[Route('/service/search', name: 'search_service')]
+    #[Route('/service/search', name: 'search_service')]
     public function search(): Response
     {
         return $this->render('service/index.html.twig', [

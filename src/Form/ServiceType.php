@@ -37,8 +37,10 @@ class ServiceType extends AbstractType
             // drop down menu avec les adresses du host
             ->add('address', EntityType::class, [
                 'class' => Address::class,
-                'choices' => $user->getAddresses(), 
-                'choice_label' => 'street'
+                'choices' => $user->getAddresses(),
+                'choice_label' => function ($adresse){
+                    return $adresse->getNumber(). " " .$adresse->getStreet() . ", boite " . $adresse->getBox() . ", " . $adresse->getCity() . ", " . $adresse->getState() . ", " . $adresse->getPostalCode() . ", " . $adresse->getCountry();
+                }
             ]);
     }
 
