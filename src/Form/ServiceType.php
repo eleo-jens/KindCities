@@ -5,14 +5,16 @@ namespace App\Form;
 use App\Entity\Address;
 use App\Entity\Service;
 use App\Entity\Categorie;
-use Doctrine\ORM\EntityManagerInterface;
+use App\Form\DisponibiliteType;
 use Doctrine\ORM\Mapping\Entity;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Form\AbstractType;
-use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
+use Symfony\Component\Form\Extension\Core\Type\CollectionType;
+use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 
 class ServiceType extends AbstractType
 {
@@ -41,7 +43,13 @@ class ServiceType extends AbstractType
                 'choice_label' => function ($adresse){
                     return $adresse->getNumber(). " " .$adresse->getStreet() . ", boite " . $adresse->getBox() . ", " . $adresse->getCity() . ", " . $adresse->getState() . ", " . $adresse->getPostalCode() . ", " . $adresse->getCountry();
                 }
-            ]);
+            ])
+            ->add('disponibilites', CollectionType::class, [
+                'entry_type' => DisponibiliteType::class, 
+                'entry_options' => ['label' => false], 
+                'allow_add' => true,
+                'by_reference' => false,
+            ]); 
     }
 
     public function configureOptions(OptionsResolver $resolver): void

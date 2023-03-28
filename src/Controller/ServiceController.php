@@ -39,8 +39,9 @@ class ServiceController extends AbstractController
         $address = new Address(); 
         $formAddress = $this->createForm(AddressType::class, $address);
         $form->handleRequest($req);
-
-        if ($form->isSubmitted() && $form->isValid()){
+        // && $form->isValid()
+        
+        if ($form->isSubmitted() ){
             $em = $doctrine->getManager();
             $em->persist($service);
             $em->flush();

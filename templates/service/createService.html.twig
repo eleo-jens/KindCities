@@ -25,7 +25,17 @@
 					}
 		)
 	}}
-	{{ form_widget (form) }}
+	{{ form_row (form.name) }}
+	{{ form_row (form.description) }}
+	{{ form_row (form.categorie) }}
+	{{ form_row (form.address) }}
+
+	<ul class="disponibilites"
+		data-index="{{ form.disponibilites|length > 0 ? form.disponibilites|last.vars.name + 1 : 0 }}"
+		data-prototype="{{ form_widget(form.disponibilites.vars.prototype)|e('html_attr') }}"
+	></ul>
+
+	<button type="button" class="add_item_link" data-collection-holder-class="disponibilites">Add a disponibility</button>
 	{{ form_end (form, {render_rest:false}) }}
 
 	<button id="addAddress">Add a new address</button>
@@ -33,8 +43,7 @@
 
 	{{ form_start (form_address, {'attr': {'id': 'form_address'}} ) }} 
 	{{ form_widget (form_address) }}
-	
-	<button id="sendAddress" data-route="{{ path ("add_address") }}">Add</button>
+		<button id="sendAddress" data-route="{{ path ("add_address") }}">Add</button>
 	{{ form_end (form_address) }}
 	
 	<input id="submit_service" type="submit" value="Post a new service">
@@ -45,6 +54,17 @@
 
 <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
 <script>
+
+	// https://uxsolutions.github.io/bootstrap-datepicker/?markup=range&format=&weekStart=&startDate=&endDate=&startView=0&minViewMode=0&maxViewMode=4&todayBtn=false&clearBtn=false&language=en&orientation=auto&multidate=&multidateSeparator=&keyboardNavigation=on&forceParse=on#sandbox
+	// https://symfony.com/doc/current/reference/forms/types/date.html 
+	{# $(document).ready(function() {
+        // you may need to change this code if you are not using Bootstrap Datepicker
+        $('.js-datepicker').datepicker({
+            format: 'yyyy-mm-dd'
+        });
+    }); #}
+
+
 	let addAddress = document.getElementById("addAddress"); 
 	let sendAddress = document.getElementById("sendAddress");
 	let formAddress = document.getElementById("form_address");
@@ -95,6 +115,29 @@
 	submit_service.addEventListener("click", function (event) {
 		form_service.submit();
 	});	
+
+	const addFormToCollection = (e) => {
+		const collectionHolder = document.querySelector('.' + e.currentTarget.dataset.collectionHolderClass);
+
+		const item = document.createElement('li');
+
+		item.innerHTML = collectionHolder
+			.dataset
+			.prototype
+			.replace(
+			/__name__/g,
+			collectionHolder.dataset.index
+			);
+
+		collectionHolder.appendChild(item);
+
+		collectionHolder.dataset.index++;
+	};
+
+	document.querySelectorAll('.add_item_link')
+		.forEach(btn => {
+			btn.addEventListener("click", addFormToCollection)
+		});
 </script>
 
 {% endblock %}

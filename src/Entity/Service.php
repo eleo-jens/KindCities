@@ -22,7 +22,7 @@ class Service
     #[ORM\Column(type: Types::TEXT)]
     private ?string $description = null;
 
-    #[ORM\OneToMany(mappedBy: 'service', targetEntity: Disponibilite::class, orphanRemoval: true)]
+    #[ORM\OneToMany(mappedBy: 'service', targetEntity: Disponibilite::class, orphanRemoval: true, cascade: ['persist'])]
     private Collection $disponibilites;
 
     #[ORM\OneToMany(mappedBy: 'service', targetEntity: DetailReservation::class, orphanRemoval: true)]
