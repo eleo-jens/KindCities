@@ -7,8 +7,16 @@
 
 1. Créer un formulaire pour le service (servicetype) 
 2. Drop down uniquement des adresses existantes de l'host connecté
+   
+Code de ServiceType.php: 
 
 ```php
+    private $token; 
+    public function __construct(TokenStorageInterface $token)
+    {
+       $this->token = $token;
+    }
+
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
 
@@ -29,4 +37,13 @@
             ]);
     }
 ```
+
+Pour rajouter une nouvelle:
+
+- rajouter button New
+- le button montre un div cache contenant un form pour l'adresse. le form a un submit (ajax)
+- creer l'appel ajax en prenant les donnees du form
+- creer l'action de traitement dans le controller
+- mettre a jour le DOM
+
 

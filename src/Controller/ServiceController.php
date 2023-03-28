@@ -2,7 +2,9 @@
 
 namespace App\Controller;
 
+use App\Entity\Address;
 use App\Entity\Service;
+use App\Form\AddressType;
 use App\Form\ServiceType;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Component\HttpFoundation\Request;
@@ -29,6 +31,9 @@ class ServiceController extends AbstractController
     {
         $service  = new Service();
         $form = $this->createForm(ServiceType::class, $service);
+        // créer un form adresse sans handlerequest
+        $address = new Address(); 
+        $formAddress = $this->createForm(AddressType::class, $address);
         $form->handleRequest($req);
 
         if ($form->isSubmitted() && $form->isValid()){
@@ -39,8 +44,23 @@ class ServiceController extends AbstractController
             return new Response("C'est ajouté");
         }
 
-        $vars = ['formulaire' => $form->createView()];
+        $vars = ['form' => $form->createView(),
+                 'form_address' => $formAddress->createView()];
+
         return $this->render('service/createService.html.twig', $vars);
+    }
+
+    #[Route ("serice/create/add/address", name: "add_address")]
+    public function addAddressService(Request $ajaxRequest){
+        
+        // créer une nouvelle Address
+        // renvoyer l'id ? L'ajouter dans le service ?
+        
+        $street = $ajaxRequest->get('street');
+
+        // retourner une reponse Json
+        //return new JsonResponse();
+
     }
 
     // page de recherche d'un service

@@ -1,18 +1,75 @@
 {% extends 'base.html.twig' %}
 
 {% block title %}KindCities | Services for Refugees
+
+{% block stylesheets %}
+<style>
+	#form_address {
+		display: none;
+	}
+</style>
+
+{% endblock %}
+
 {% endblock %}
 
 {% block body %}
+
+
 	<h1>Offer a new service</h1>
 	<h2>Please fill the following information about your service.</h2>
 	
-	{{ form_start (formulaire, 
+	{{ form_start (form, 
 		{ 'action' : path('create_service')})
 	}}
-	{{ form_widget (formulaire) }}
-
+	{{ form_widget (form) }}
+	<button id="addAddress">Add a new address</button>
+	<div id="form_address">
+		{{ form_row (form_address.street) }}
+		{{ form_row (form_address.number) }}
+		{{ form_row (form_address.box) }}
+		<button id="sendAddress">Add</button>
+	</div>
 	<input type="submit" value="Post a new service">
 
-	{{ form_end(formulaire, {render_rest:false}) }}
+	{{ form_end (form, {render_rest:false}) }}
+{% endblock %}
+
+{% block javascripts %}
+
+<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+<script>
+	let addAddress = document.getElementById("addAddress"); 
+	let sendAddress = document.getElementById("sendAddress");
+	let formAddress = document.getElementById("formAddress");
+
+	console.log(addAddress);
+
+	addAddress.addEventListener("click", function (event) {
+		event.preventDefault();
+
+		console.log(document.getElementById("form_address"));
+		form_address.style.display = "block"; 
+
+		sendAddress.addEventListener("click", function (event) {
+			event.preventDefault();
+
+			// faire l'appel ajax ici 
+			axios({
+				url: '{{path ("add_address")}}',
+				method: 'POST',
+				headers: {},
+				data: new FormData(document.getElementById("form_address"))
+			})
+			.then(function (response){
+				console.log(response);
+			});
+
+			// vider le form
+			// cacher le form
+		} );
+	});
+
+</script>
+
 {% endblock %}
