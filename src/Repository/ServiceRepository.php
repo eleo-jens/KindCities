@@ -39,6 +39,29 @@ class ServiceRepository extends ServiceEntityRepository
         }
     }
 
+
+       /**
+    * @return Service[] Returns an array of Service objects
+    */
+   public function findByFilters($idCategorie, $from, $to): array
+   {
+       return $this->createQueryBuilder('s')
+           ->andWhere(':idCategorie is NULL or s.categorie = :idCategorie')
+           ->setParameter(':idCategorie', $idCategorie)
+
+           ->Join('s.disponibilites', 'd')
+           ->andWhere(':to BETWEEN d.beginDateDispo AND d.endDateDispo')
+           ->setParameter('to', $to)
+           ->andWhere(':from BETWEEN d.beginDateDispo AND d.endDateDispo')
+           ->setParameter('from', $from)
+
+           ->orderBy('s.id', 'ASC')
+        //    ->setMaxResults()
+           ->getQuery()
+           ->getResult()
+       ;
+   }
+
 //    /**
 //     * @return Service[] Returns an array of Service objects
 //     */

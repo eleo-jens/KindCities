@@ -5,7 +5,10 @@ namespace App\Controller;
 use App\Entity\Address;
 use App\Entity\Service;
 use App\Form\AddressType;
+use App\Form\SearchType;
 use App\Form\ServiceType;
+use App\Repository\ServiceRepository;
+use App\Request\SearchRequest;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -35,7 +38,7 @@ class ServiceController extends AbstractController
     {
         $service  = new Service();
         $form = $this->createForm(ServiceType::class, $service);
-        // créer un form adresse sans handlerequest
+        // créer un form address sans handlerequest
         $address = new Address(); 
         $formAddress = $this->createForm(AddressType::class, $address);
         $form->handleRequest($req);
@@ -49,6 +52,7 @@ class ServiceController extends AbstractController
             $em->persist($service);
             $em->flush();
 
+            // ici il faudrait redirct vers la page dashboard de l'host à créer
             return new Response("C'est ajouté");
         }
 
@@ -58,15 +62,11 @@ class ServiceController extends AbstractController
         return $this->render('service/createService.html.twig', $vars);
     }
 
+    // créer une nouvelle Address (AJAX)
     #[Route ("serice/create/add/address", name: "add_address")]
     public function addAddressService(Request $ajaxRequest, ManagerRegistry $doctrine, SerializerInterface $serialiser){
         
-        // créer une nouvelle Address
-        // renvoyer l'id ? L'ajouter dans le service ?
-
-        // dd($ajaxRequest->get('address'));
         $address = $ajaxRequest->get('address');
-
         $newAddress = new Address($address);
         $newAddress->addHost($this->getUser());
         $em = $doctrine->getManager();
@@ -77,15 +77,27 @@ class ServiceController extends AbstractController
         $json = $serialiser->serialize($newAddress,'json',[AbstractNormalizer::IGNORED_ATTRIBUTES => ['hosts','services']]);
         
         return new JsonResponse($json);
-
     }
 
     // page de recherche d'un service
     #[Route('/service/search', name: 'search_service')]
-    public function search(): Response
+    public function search(Request $request, ServiceRepository $repo): Response
     {
-        return $this->render('service/index.html.twig', [
-            'controller_name' => 'ServiceController',
+
+        $searchRequest = new SearchRequest();
+
+        $form = $this->createForm(SearchType::class, $searchRequest, [
+            'method' => 'GET'
         ]);
+
+        $vars = [
+            'form' => $form->handleRequest($request)];
+
+        if ($form->isSubmitted()){
+            $services = $repo->findByFilters($searchRequest->getCategorie()?->getId(), $searchRequest->getFrom(), $searchRequest->getTo());
+            dd($services);
+        }
+
+        return $this->render('service/search.html.twig', $vars);
     }
 }

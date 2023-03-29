@@ -36,10 +36,14 @@ class Service
     #[ORM\JoinColumn(nullable: false)]
     private ?Address $address = null;
 
+    #[ORM\OneToMany(mappedBy: 'service', targetEntity: Picture::class, orphanRemoval: true, cascade:['persist', 'remove'])]
+    private Collection $pictures;
+
     public function __construct()
     {
         $this->disponibilites = new ArrayCollection();
         $this->DetailsReservation = new ArrayCollection();
+        $this->pictures = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -151,6 +155,36 @@ class Service
     public function setAddress(?Address $address): self
     {
         $this->address = $address;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Picture>
+     */
+    public function getPictures(): Collection
+    {
+        return $this->pictures;
+    }
+
+    public function addPicture(Picture $picture): self
+    {
+        if (!$this->pictures->contains($picture)) {
+            $this->pictures->add($picture);
+            $picture->setService($this);
+        }
+
+        return $this;
+    }
+
+    public function removePicture(Picture $picture): self
+    {
+        if ($this->pictures->removeElement($picture)) {
+            // set the owning side to null (unless already changed)
+            if ($picture->getService() === $this) {
+                $picture->setService(null);
+            }
+        }
 
         return $this;
     }

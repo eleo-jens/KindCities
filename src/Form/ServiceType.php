@@ -6,6 +6,7 @@ use App\Entity\Address;
 use App\Entity\Service;
 use App\Entity\Categorie;
 use App\Form\DisponibiliteType;
+use App\Repository\AddressRepository;
 use Doctrine\ORM\Mapping\Entity;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Form\AbstractType;
@@ -39,7 +40,10 @@ class ServiceType extends AbstractType
             // drop down menu avec les adresses du host
             ->add('address', EntityType::class, [
                 'class' => Address::class,
-                'choices' => $user->getAddresses(),
+                //'choices' => $user->getAddresses(),
+                'query_builder' => function(AddressRepository $repo) use($user) {
+                    return $repo->getAddressesByUserQB($user->getId());
+                },
                 'choice_label' => function ($adresse){
                     return $adresse->getNumber(). " " .$adresse->getStreet() . ", boite " . $adresse->getBox() . ", " . $adresse->getCity() . ", " . $adresse->getState() . ", " . $adresse->getPostalCode() . ", " . $adresse->getCountry();
                 }
@@ -48,6 +52,14 @@ class ServiceType extends AbstractType
                 'entry_type' => DisponibiliteType::class, 
                 'entry_options' => ['label' => false], 
                 'allow_add' => true,
+                'allow_delete' => true,
+                'by_reference' => false,
+            ])
+            ->add('pictures', CollectionType::class, [
+                'entry_type' => PictureType::class,
+                'entry_options' => ['label' => false], 
+                'allow_add' => true,
+                'allow_delete' => true,
                 'by_reference' => false,
             ]); 
     }

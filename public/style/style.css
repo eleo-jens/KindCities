@@ -1,7 +1,14 @@
     body {
         padding: 20px 0; 
     }
-
+    
+    div#addAddress {
+        text-decoration: underline;
+        color: blue;
+        cursor: pointer;
+    }
+    
 	#form_address {
 		display: none;
 	}
+

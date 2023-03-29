@@ -4,7 +4,7 @@
 
 {% block body %}
 
-	
+	{# Formulaire de création d'un service #}
 	<h1>Offer a new service</h1>
 	<h2>Please fill the following information about your service.</h2>
 	
@@ -17,19 +17,32 @@
 	{{ form_row (form.name) }}
 	{{ form_row (form.description) }}
 	{{ form_row (form.categorie) }}
-	{{ form_row (form.address) }}
 
+	{# Notation pour incruster un CollectionType pour les pictures #}
+	<ul class="pictures row"
+		data-index="{{ form.pictures|length > 0 ? form.pictures|last.vars.name + 1 : 0 }}"
+		data-prototype="{{ form_widget(form.pictures.vars.prototype, {'entry_options': {'attr': {'class': 'col-12 col-sm-6'}}})|e('html_attr') }}"
+	></ul>
+
+	<button type="button" class="add_item_link btn btn-secondary mb-3" data-collection-holder-class="pictures">Add pictures</button>
+	
+	{# Dropdown list avec les adresses de l'host #}
+	{{ form_row (form.address) }}
+	
+	<div id="addAddress">Add a new address</div>
+
+	{# Notation pour incruster un CollectionType pour les disponibilites #}
 	<ul class="disponibilites row"
 		data-index="{{ form.disponibilites|length > 0 ? form.disponibilites|last.vars.name + 1 : 0 }}"
 		data-prototype="{{ form_widget(form.disponibilites.vars.prototype, {'entry_options': {'attr': {'class': 'col-12 col-sm-6'}}})|e('html_attr') }}"
 	></ul>
 
-	<button type="button" class="add_item_link btn btn-secondary mb-3" data-collection-holder-class="disponibilites">Add a disponibility</button>
+	<button type="button" class="add_item_link btn btn-secondary mb-3" data-collection-holder-class="disponibilites">Add disponibilities</button>
 	{{ form_end (form, {render_rest:false}) }}
 
-	<button id="addAddress" class="btn btn-secondary">Create a new address</button>
-	
 
+	
+	{# Second formulaire caché pour rajouter une adresse en plus #}
 	{{ form_start (form_address, {'attr': {'id': 'form_address'}} ) }} 
 	{{ form_widget (form_address) }}
 		<button id="sendAddress" class="btn btn-secondary mb-3" data-route="{{ path ("add_address") }}">Add the new address</button>
@@ -58,19 +71,14 @@
 	let sendAddress = document.getElementById("sendAddress");
 	let formAddress = document.getElementById("form_address");
 	
-
-
+	{# Affiche le formulaire d'ajout d'adresse ("formAddress") lors du click de "addAdress" #}
 	addAddress.addEventListener("click", function (event) {
 		event.preventDefault();
-
 		console.log(document.getElementById("form_address"));
 		formAddress.style.display = "block"; 
-
-		
 	});
 
-
-
+	{# Gestion AJAX de l'ajout d'une nouvelle adresse / Mise à jour du select avec l'adresse ajoutée #}
 	sendAddress.addEventListener("click", function (event) {
 			event.preventDefault();
 			console.log (event.target);
@@ -100,11 +108,12 @@
 			formAddress.style.display = "none"; 
 	});
 
-
+	{# Submit du formulaire de service lors du click (car l'input est en dehors du formulaire de service) #}
 	submit_service.addEventListener("click", function (event) {
 		form_service.submit();
 	});	
 
+	{# code pour l'ajout d'une disponibilité qui est un CollectionType #}
 	const addFormToCollection = (e) => {
 		const collectionHolder = document.querySelector('.' + e.currentTarget.dataset.collectionHolderClass);
 
@@ -123,6 +132,7 @@
 		collectionHolder.dataset.index++;
 	};
 
+	{# code pour l'ajout d'une disponibilité qui est un CollectionType #}
 	document.querySelectorAll('.add_item_link')
 		.forEach(btn => {
 			btn.addEventListener("click", addFormToCollection)

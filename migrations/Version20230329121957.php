@@ -10,7 +10,7 @@ use Doctrine\Migrations\AbstractMigration;
 /**
  * Auto-generated Migration: Please modify to your needs!
  */
-final class Version20230328123516 extends AbstractMigration
+final class Version20230329121957 extends AbstractMigration
 {
     public function getDescription(): string
     {
@@ -28,6 +28,7 @@ final class Version20230328123516 extends AbstractMigration
         $this->addSql('CREATE TABLE feedback (id INT AUTO_INCREMENT NOT NULL, refugee_id INT NOT NULL, host_id INT NOT NULL, reservation_id INT NOT NULL, stars INT NOT NULL, comment LONGTEXT DEFAULT NULL, INDEX IDX_D22944587ECD7344 (refugee_id), INDEX IDX_D22944581FB8D185 (host_id), INDEX IDX_D2294458B83297E7 (reservation_id), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB');
         $this->addSql('CREATE TABLE language (id INT AUTO_INCREMENT NOT NULL, name VARCHAR(255) DEFAULT NULL, PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB');
         $this->addSql('CREATE TABLE language_user (language_id INT NOT NULL, user_id INT NOT NULL, INDEX IDX_BF9A3C0582F1BAF4 (language_id), INDEX IDX_BF9A3C05A76ED395 (user_id), PRIMARY KEY(language_id, user_id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB');
+        $this->addSql('CREATE TABLE picture (id INT AUTO_INCREMENT NOT NULL, service_id INT NOT NULL, name VARCHAR(255) NOT NULL, updated_at DATE NOT NULL, INDEX IDX_16DB4F89ED5CA9E6 (service_id), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB');
         $this->addSql('CREATE TABLE reservation (id INT AUTO_INCREMENT NOT NULL, host_id INT NOT NULL, refugee_id INT NOT NULL, date_reservation DATE DEFAULT NULL, code_reservation VARCHAR(255) DEFAULT NULL, resume LONGTEXT DEFAULT NULL, INDEX IDX_42C849551FB8D185 (host_id), INDEX IDX_42C849557ECD7344 (refugee_id), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB');
         $this->addSql('CREATE TABLE service (id INT AUTO_INCREMENT NOT NULL, categorie_id INT DEFAULT NULL, address_id INT NOT NULL, name VARCHAR(255) NOT NULL, description LONGTEXT NOT NULL, INDEX IDX_E19D9AD2BCF5E72D (categorie_id), INDEX IDX_E19D9AD2F5B7AF75 (address_id), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB');
         $this->addSql('CREATE TABLE user (id INT AUTO_INCREMENT NOT NULL, email VARCHAR(180) NOT NULL, roles LONGTEXT NOT NULL COMMENT \'(DC2Type:json)\', password VARCHAR(255) NOT NULL, last_name VARCHAR(255) DEFAULT NULL, first_name VARCHAR(255) DEFAULT NULL, phone_number VARCHAR(255) DEFAULT NULL, birth_date DATE DEFAULT NULL, presentation LONGTEXT DEFAULT NULL, picture VARCHAR(255) DEFAULT NULL, gender VARCHAR(30) DEFAULT NULL, discr VARCHAR(255) NOT NULL, national_number_id VARCHAR(255) DEFAULT NULL, status VARCHAR(255) DEFAULT NULL, UNIQUE INDEX UNIQ_8D93D649E7927C74 (email), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB');
@@ -43,6 +44,7 @@ final class Version20230328123516 extends AbstractMigration
         $this->addSql('ALTER TABLE feedback ADD CONSTRAINT FK_D2294458B83297E7 FOREIGN KEY (reservation_id) REFERENCES reservation (id)');
         $this->addSql('ALTER TABLE language_user ADD CONSTRAINT FK_BF9A3C0582F1BAF4 FOREIGN KEY (language_id) REFERENCES language (id) ON DELETE CASCADE');
         $this->addSql('ALTER TABLE language_user ADD CONSTRAINT FK_BF9A3C05A76ED395 FOREIGN KEY (user_id) REFERENCES user (id) ON DELETE CASCADE');
+        $this->addSql('ALTER TABLE picture ADD CONSTRAINT FK_16DB4F89ED5CA9E6 FOREIGN KEY (service_id) REFERENCES service (id)');
         $this->addSql('ALTER TABLE reservation ADD CONSTRAINT FK_42C849551FB8D185 FOREIGN KEY (host_id) REFERENCES user (id)');
         $this->addSql('ALTER TABLE reservation ADD CONSTRAINT FK_42C849557ECD7344 FOREIGN KEY (refugee_id) REFERENCES user (id)');
         $this->addSql('ALTER TABLE service ADD CONSTRAINT FK_E19D9AD2BCF5E72D FOREIGN KEY (categorie_id) REFERENCES categorie (id)');
@@ -64,6 +66,7 @@ final class Version20230328123516 extends AbstractMigration
         $this->addSql('ALTER TABLE feedback DROP FOREIGN KEY FK_D2294458B83297E7');
         $this->addSql('ALTER TABLE language_user DROP FOREIGN KEY FK_BF9A3C0582F1BAF4');
         $this->addSql('ALTER TABLE language_user DROP FOREIGN KEY FK_BF9A3C05A76ED395');
+        $this->addSql('ALTER TABLE picture DROP FOREIGN KEY FK_16DB4F89ED5CA9E6');
         $this->addSql('ALTER TABLE reservation DROP FOREIGN KEY FK_42C849551FB8D185');
         $this->addSql('ALTER TABLE reservation DROP FOREIGN KEY FK_42C849557ECD7344');
         $this->addSql('ALTER TABLE service DROP FOREIGN KEY FK_E19D9AD2BCF5E72D');
@@ -78,6 +81,7 @@ final class Version20230328123516 extends AbstractMigration
         $this->addSql('DROP TABLE feedback');
         $this->addSql('DROP TABLE language');
         $this->addSql('DROP TABLE language_user');
+        $this->addSql('DROP TABLE picture');
         $this->addSql('DROP TABLE reservation');
         $this->addSql('DROP TABLE service');
         $this->addSql('DROP TABLE user');
