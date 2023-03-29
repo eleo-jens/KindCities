@@ -42,6 +42,9 @@ class ServiceController extends AbstractController
         // && $form->isValid()
         
         if ($form->isSubmitted() ){
+            foreach($service->getDisponibilites() as $key => $dispo){
+                $dispo->setHost($this->getUser());
+            }
             $em = $doctrine->getManager();
             $em->persist($service);
             $em->flush();

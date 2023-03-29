@@ -23,9 +23,6 @@ class DisponibiliteType extends AbstractType
                 // 'html5' => false, 
                 // 'attr' => ['class' => 'js-datepicker']
             ])
-
-            
-            // ->add('host') 
         ;
     }
 

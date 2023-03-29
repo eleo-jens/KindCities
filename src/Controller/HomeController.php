@@ -11,7 +11,11 @@ class HomeController extends AbstractController
     #[Route('/home', name: 'app_home')]
     public function index(): Response
     {
-        // dd($this->getUser()->getRoles()[0]);
+        return $this->render('home/index.html.twig');
+    }
+
+    #[Route('/auth/role', name: 'app_auth_role')]
+    public function redirectRoles(): Response {
         if ($this->getUser()->getRoles()[0] == "ROLE_HOST"){
             return $this->redirectToRoute('app_host');
         }

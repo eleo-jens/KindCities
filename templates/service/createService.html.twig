@@ -1,21 +1,10 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}KindCities | Services for Refugees
-
-{% block stylesheets %}
-<style>
-	#form_address {
-		display: none;
-	}
-</style>
-
-{% endblock %}
-
-{% endblock %}
+{% block title %}KindCities | Services for Refugees {% endblock %}
 
 {% block body %}
 
-
+	
 	<h1>Offer a new service</h1>
 	<h2>Please fill the following information about your service.</h2>
 	
@@ -30,23 +19,23 @@
 	{{ form_row (form.categorie) }}
 	{{ form_row (form.address) }}
 
-	<ul class="disponibilites"
+	<ul class="disponibilites row"
 		data-index="{{ form.disponibilites|length > 0 ? form.disponibilites|last.vars.name + 1 : 0 }}"
-		data-prototype="{{ form_widget(form.disponibilites.vars.prototype)|e('html_attr') }}"
+		data-prototype="{{ form_widget(form.disponibilites.vars.prototype, {'entry_options': {'attr': {'class': 'col-12 col-sm-6'}}})|e('html_attr') }}"
 	></ul>
 
-	<button type="button" class="add_item_link" data-collection-holder-class="disponibilites">Add a disponibility</button>
+	<button type="button" class="add_item_link btn btn-secondary mb-3" data-collection-holder-class="disponibilites">Add a disponibility</button>
 	{{ form_end (form, {render_rest:false}) }}
 
-	<button id="addAddress">Add a new address</button>
+	<button id="addAddress" class="btn btn-secondary">Create a new address</button>
 	
 
 	{{ form_start (form_address, {'attr': {'id': 'form_address'}} ) }} 
 	{{ form_widget (form_address) }}
-		<button id="sendAddress" data-route="{{ path ("add_address") }}">Add</button>
+		<button id="sendAddress" class="btn btn-secondary mb-3" data-route="{{ path ("add_address") }}">Add the new address</button>
 	{{ form_end (form_address) }}
 	
-	<input id="submit_service" type="submit" value="Post a new service">
+	<input id="submit_service" type="submit" value="Post my service" class="btn btn-primary">
 
 {% endblock %}
 
