@@ -4,11 +4,15 @@ namespace App\Controller;
 
 use App\Entity\Address;
 use App\Entity\Service;
-use App\Form\AddressType;
 use App\Form\SearchType;
+use App\Form\AddressType;
 use App\Form\ServiceType;
-use App\Repository\ServiceRepository;
 use App\Request\SearchRequest;
+use App\Repository\AddressRepository;
+use App\Repository\ServiceRepository;
+use App\Repository\CategorieRepository;
+use App\Repository\HostRepository;
+use App\Repository\UserRepository;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -79,9 +83,9 @@ class ServiceController extends AbstractController
         return new JsonResponse($json);
     }
 
-    // page de recherche d'un service
+    // page de recherche de services
     #[Route('/service/search', name: 'search_service')]
-    public function search(Request $request, ServiceRepository $repo): Response
+    public function searchService(Request $request, ServiceRepository $repo): Response
     {
 
         $searchRequest = new SearchRequest();
@@ -95,9 +99,31 @@ class ServiceController extends AbstractController
 
         if ($form->isSubmitted()){
             $services = $repo->findByFilters($searchRequest->getCategorie()?->getId(), $searchRequest->getFrom(), $searchRequest->getTo());
-            dd($services);
+            // dump($services[0]->getPictures()[0]->getName());
+            // dd($services);
+            return $this->render('service/results.html.twig', [ 'results' => $services ]);
         }
-
         return $this->render('service/search.html.twig', $vars);
+    }
+
+    #[Route('/service/{id}', name: 'service_details')]
+    public function serviceDetails(ManagerRegistry $doctrine, ServiceRepository $repo, CategorieRepository $categRepo, AddressRepository $addressRepo, HostRepository $userRepo, Request $req){
+        
+        // $id = $req->get('id');
+        // $em = $doctrine->getManager();
+        // $query = $em->createQuery(
+        //     'SELECT service, address, categorie FROM App\Entity\Service service
+        //      JOIN service.categorie categorie
+        //      JOIN service.address address
+        //      WHERE service.id =  :id';
+        // ); 
+        
+        // $id = $req->get('id');
+        // $service = $repo->find($id);
+        // dd($categRepo->find($service->getCategorie()->getId()));
+
+        // $vars = ['service' => $service, 
+        //          'id' => $id ];
+        // return $this->render('service/details.html.twig', $vars);
     }
 }

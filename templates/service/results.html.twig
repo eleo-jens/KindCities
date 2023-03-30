@@ -1,0 +1,22 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}KindCities | Services for Refugees {% endblock %}
+
+{% block body %}
+
+{# {{ set nb = sizeof(results) }} #}
+
+<h1 class="text-blue-700"> Results </h1>
+<div class="bg-gray-300">
+    {% for service in results %}
+        <div>
+            {# Problème pour récupérer mon image #}
+            {# <img src='/public/images/{{ service.pictures[0].name }}'> #}
+            {{ service.name }}
+            {{ service.description }}
+            <div><a href=" {{ path('service_details', {'id': service.id}) }}">View details</a></div>
+        </div>
+    {% endfor %}
+</div>
+
+{% endblock %}
