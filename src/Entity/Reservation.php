@@ -25,9 +25,6 @@ class Reservation
     #[ORM\Column(type: Types::TEXT, nullable: true)]
     private ?string $resume = null;
 
-    #[ORM\OneToMany(mappedBy: 'reservation', targetEntity: DetailReservation::class, orphanRemoval: true)]
-    private Collection $DetailsReservation;
-
     #[ORM\ManyToOne(inversedBy: 'reservations')]
     #[ORM\JoinColumn(nullable: false)]
     private ?Host $host = null;
@@ -39,9 +36,18 @@ class Reservation
     #[ORM\OneToMany(mappedBy: 'reservation', targetEntity: Feedback::class, orphanRemoval: true)]
     private Collection $feedbacks;
 
+    #[ORM\Column(type: Types::DATE_MUTABLE)]
+    private ?\DateTimeInterface $beginDate = null;
+
+    #[ORM\Column(type: Types::DATE_MUTABLE)]
+    private ?\DateTimeInterface $endDate = null;
+
+    #[ORM\ManyToOne(inversedBy: 'reservations')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?Service $service = null;
+
     public function __construct()
     {
-        $this->DetailsReservation = new ArrayCollection();
         $this->feedbacks = new ArrayCollection();
     }
 
@@ -82,36 +88,6 @@ class Reservation
     public function setResume(?string $resume): self
     {
         $this->resume = $resume;
-
-        return $this;
-    }
-
-    /**
-     * @return Collection<int, DetailReservation>
-     */
-    public function getDetailsReservation(): Collection
-    {
-        return $this->DetailsReservation;
-    }
-
-    public function addDetailsReservation(DetailReservation $detailsReservation): self
-    {
-        if (!$this->DetailsReservation->contains($detailsReservation)) {
-            $this->DetailsReservation->add($detailsReservation);
-            $detailsReservation->setReservation($this);
-        }
-
-        return $this;
-    }
-
-    public function removeDetailsReservation(DetailReservation $detailsReservation): self
-    {
-        if ($this->DetailsReservation->removeElement($detailsReservation)) {
-            // set the owning side to null (unless already changed)
-            if ($detailsReservation->getReservation() === $this) {
-                $detailsReservation->setReservation(null);
-            }
-        }
 
         return $this;
     }
@@ -166,6 +142,42 @@ class Reservation
                 $feedback->setReservation(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getBeginDate(): ?\DateTimeInterface
+    {
+        return $this->beginDate;
+    }
+
+    public function setBeginDate(\DateTimeInterface $beginDate): self
+    {
+        $this->beginDate = $beginDate;
+
+        return $this;
+    }
+
+    public function getEndDate(): ?\DateTimeInterface
+    {
+        return $this->endDate;
+    }
+
+    public function setEndDate(\DateTimeInterface $endDate): self
+    {
+        $this->endDate = $endDate;
+
+        return $this;
+    }
+
+    public function getService(): ?Service
+    {
+        return $this->service;
+    }
+
+    public function setService(?Service $service): self
+    {
+        $this->service = $service;
 
         return $this;
     }

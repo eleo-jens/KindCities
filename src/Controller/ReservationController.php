@@ -19,7 +19,6 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 class ReservationController extends AbstractController
 {
-
     // CECI EST JUSTE UN TEST EN DUR
     #[Route('/reservation', name: 'app_reservation')]
     public function index(EntityManagerInterface $em): Response
@@ -44,30 +43,21 @@ class ReservationController extends AbstractController
         $res->setRefugee($refugee);
         $res->setDateReservation(new DateTime("22-10-2022"));
         $res->setCodeReservation("AB123");
+        $res->setService($service);
+        $res->setBeginDate(new DateTime("01-01-2023"));
+        $res->setEndDate(new DateTime("04-01-2023"));
         $em->persist($res);
         $em->flush();
-        $reservation = $em->getRepository(Reservation::class)->find(1);
-        
-        // créer une DetailReservation
-        $detail = new DetailReservation();
-        $detail->setService($service);
-        $detail->setReservation($reservation);
 
         //TEST DE DIFFERENTES DATES
-        // $detail->setBeginDate(new DateTime("03-01-2023"));
-        // $detail->setEndDate(new DateTime("05-01-2023"));
+        // $res->setBeginDate(new DateTime("03-01-2023"));
+        // $res->setEndDate(new DateTime("05-01-2023"));
 
-        // $detail->setBeginDate(new DateTime("01-01-2023"));
-        // $detail->setEndDate(new DateTime("07-01-2023"));
+        // $res->setBeginDate(new DateTime("01-01-2023"));
+        // $res->setEndDate(new DateTime("07-01-2023"));
 
-        // $detail->setBeginDate(new DateTime("04-01-2023"));
-        // $detail->setEndDate(new DateTime("07-01-2023"));
-
-        $detail->setBeginDate(new DateTime("01-01-2023"));
-        $detail->setEndDate(new DateTime("04-01-2023"));
-
-        $em->persist($detail);
-        $em->flush();
+        // $res->setBeginDate(new DateTime("04-01-2023"));
+        // $res->setEndDate(new DateTime("07-01-2023"));
 
         // gestion des créanaux de disponibilité après une réservation
         // dates pour les dispos
@@ -75,8 +65,8 @@ class ReservationController extends AbstractController
         $finDispo = $dispo->getEndDateDispo();
 
         // dates pour la reservation qu'on veut faire
-        $debutReservation = $detail->getBeginDate();
-        $finReservation = $detail->getEndDate();
+        $debutReservation = $res->getBeginDate();
+        $finReservation = $res->getEndDate();
 
         // On peut comparer DateTimes avec ==, < et >
         // https://thevaluable.dev/php-datetime-create-compare-format 
@@ -148,7 +138,7 @@ class ReservationController extends AbstractController
     {
         $reservation = new Reservation();
         $reservation->setDateReservation(new DateTime('now'));
-        
+
 
         if ($req->get('endDate')){
 
