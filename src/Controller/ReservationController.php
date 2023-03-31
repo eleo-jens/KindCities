@@ -2,7 +2,6 @@
 
 namespace App\Controller;
 
-use App\Entity\DetailReservation;
 use DateTime;
 use App\Entity\Host;
 use App\Entity\Refugee;
@@ -10,7 +9,9 @@ use App\Entity\Service;
 use App\Entity\Reservation;
 use App\Entity\Disponibilite;
 use Doctrine\ORM\EntityManager;
+use App\Entity\DetailReservation;
 use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Validator\Constraints\Date;
@@ -140,5 +141,23 @@ class ReservationController extends AbstractController
         return $this->render('reservation/index.html.twig', [
             'controller_name' => 'ReservationController',
         ]);
+    }
+
+    #[Route('/reservations', name: 'create_reservation')]
+    public function createReservation(EntityManagerInterface $em, Request $req): Response
+    {
+        $reservation = new Reservation();
+        $reservation->setDateReservation(new DateTime('now'));
+        
+
+        if ($req->get('endDate')){
+
+        }
+        $req->get('beginDate');
+        dd($req);
+
+        // return $this->render('reservation/index.html.twig', [
+        //     'controller_name' => 'ReservationController',
+        // ]);
     }
 }

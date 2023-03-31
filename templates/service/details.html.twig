@@ -4,8 +4,32 @@
 
 {% block body %}
 
-{# <h1>A {{service.categorie.name}} by {{service.host.firstname}}</h1> #}
-<h2>{{service.name}}</h2>
-<div>{{service.description}}</div>
+<h1>A {{disponibilite.service.name}} by {{disponibilite.host.firstName}} {{disponibilite.host.lastName}}</h1>
+<h2>{{ categorie }}</h2>
+<div>Available from {{disponibilite.beginDateDispo | date("d/m/Y") }} to {{disponibilite.endDateDispo | date("d/m/Y")}}</div>
+
+
+<form method="post" accept-charset="UTF-8" action="{{ path('create_reservation') }}">
+
+    {% if categorie != "Accommodation" %}
+        <label for="beginDate">Choose exact date</label>
+        <input id="beginDate" type="date" name="beginDate"
+            value="{{ disponibilite.beginDateDispo | date("Y/m/d") }}" min="{{disponibilite.beginDateDispo | date("Y/m/d")}}" max="{{disponibilite.endDateDispo| date("Y/m/d")}}">
+
+    {% else %}
+        Choose exact dates: 
+        <label for="beginDate">Arrival Date</label>
+        <input id="beginDate" type="date" name="beginDate"
+            value="{{ disponibilite.beginDateDispo | date("Y/m/d") }}" min="{{disponibilite.beginDateDispo | date("Y/m/d")}}" max="{{disponibilite.endDateDispo | date("Y/m/d")}}">
+        
+        <label for="endDate">Departure Date</label>
+        <input id="endDate" type="date" name="endDate"
+            value="{{ disponibilite.endDateDispo | date("Y/m/d") }}" min="{{disponibilite.beginDateDispo | date("Y/m/d")}}" max="{{disponibilite.endDateDispo | date("Y/m/d")}}">
+    {% endif %}
+
+    <input type="submit" value="Book this service">
+</form>
+
+
 
 {% endblock %}

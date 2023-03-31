@@ -105,29 +105,24 @@ class ServiceController extends AbstractController
             // dump($services[0]->getPictures()[0]->getName());
             // dd($services);
             return $this->render('service/results.html.twig', [ 'results' => $disponibilites ,
-                                                                'categoryName' => $searchRequest->getCategorie()->getName()]);
+                                                                'categoryName' => $searchRequest->getCategorie()->getName(),
+                                                                'fromDate' => $searchRequest->getFrom(), 
+                                                                'toDate' => $searchRequest->getFrom()]);
         }
         return $this->render('service/search.html.twig', $vars);
     }
 
     #[Route('/service/disponibilite/{id}', name: 'disponibilite_details')]
-    public function serviceDetails(ManagerRegistry $doctrine, Request $req){
+    public function serviceDetails(ManagerRegistry $doctrine, DisponibiliteRepository $repo, ServiceRepository $repoService, Request $req){
         
-        // $id = $req->get('id');
-        // $em = $doctrine->getManager();
-        // $query = $em->createQuery(
-        //     'SELECT service, address, categorie FROM App\Entity\Service service
-        //      JOIN service.categorie categorie
-        //      JOIN service.address address
-        //      WHERE service.id =  :id';
-        // ); 
-        
-        // $id = $req->get('id');
-        // $service = $repo->find($id);
-        // dd($categRepo->find($service->getCategorie()->getId()));
+        $id = $req->get('id');
+        $disponibilite = $repo->find($id);
+        $idService = $disponibilite->getService();
+        $categorie = $repoService->find($idService)->getCategorie()->getName();
 
-        // $vars = ['service' => $service, 
-        //          'id' => $id ];
-        // return $this->render('service/details.html.twig', $vars);
+        $vars = ['disponibilite' => $disponibilite, 
+                 'id' => $id,
+                 'categorie' => $categorie ];
+        return $this->render('service/details.html.twig', $vars);
     }
 }

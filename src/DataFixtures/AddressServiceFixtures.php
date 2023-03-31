@@ -3,13 +3,14 @@
 namespace App\DataFixtures;
 
 use App\Entity\Address;
+use App\Entity\Service;
 use App\DataFixtures\AddressFixtures;
 use App\DataFixtures\ServiceFixtures;
-use App\Entity\Service;
 use Doctrine\Persistence\ObjectManager;
 use Doctrine\Bundle\FixturesBundle\Fixture;
+use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 
-class AddressServiceFixtures extends Fixture
+class AddressServiceFixtures extends Fixture implements DependentFixtureInterface
 {
     public function load(ObjectManager $manager): void
     {
