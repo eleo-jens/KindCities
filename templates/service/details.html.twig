@@ -20,12 +20,14 @@
         Choose exact dates: 
         <label for="beginDate">Arrival Date</label>
         <input id="beginDate" type="date" name="beginDate"
-            value="{{ disponibilite.beginDateDispo | date("Y/m/d") }}" min="{{disponibilite.beginDateDispo | date("Y/m/d")}}" max="{{disponibilite.endDateDispo | date("Y/m/d")}}">
+            value="{{ disponibilite.beginDateDispo | date("Y/m/d") }}" min="{{ disponibilite.beginDateDispo | date("Y/m/d")}}" max="{{disponibilite.endDateDispo | date("Y/m/d")}}">
         
         <label for="endDate">Departure Date</label>
         <input id="endDate" type="date" name="endDate"
-            value="{{ disponibilite.endDateDispo | date("Y/m/d") }}" min="{{disponibilite.beginDateDispo | date("Y/m/d")}}" max="{{disponibilite.endDateDispo | date("Y/m/d")}}">
+            value="{{ disponibilite.endDateDispo | date("Y/m/d") }}" min="{{ disponibilite.beginDateDispo | date("Y/m/d")}}" max="{{disponibilite.endDateDispo | date("Y/m/d")}}">
     {% endif %}
+
+    <input for="disponibilite" name="disponibilite" value="{{disponibilite.id}}" hidden>
 
     <input type="submit" value="Book this service">
 </form>
