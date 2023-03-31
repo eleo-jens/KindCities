@@ -6,17 +6,23 @@
 
 {# {{ set nb = sizeof(results) }} #}
 
-<h1 class="text-blue-700"> Results </h1>
+<h1 class="text-blue-700">{{ categoryName }}</h1>
 <div class="bg-gray-300">
-    {% for service in results %}
-        <div>
-            {# Problème pour récupérer mon image #}
-            {# <img src='/public/images/{{ service.pictures[0].name }}'> #}
-            {{ service.name }}
-            {{ service.description }}
-            <div><a href=" {{ path('service_details', {'id': service.id}) }}">View details</a></div>
-        </div>
-    {% endfor %}
+    {% if results %}
+        {% for disponibilite in results %}
+            <div>
+                {# Problème pour récupérer mon image #}
+                {# <img src='/public/images/{{ service.pictures[0].name }}'> #}
+                {{ disponibilite.beginDateDispo | date("d/m/Y") }}
+                {{ disponibilite.endDateDispo | date("d/m/Y")}}
+                {{ disponibilite.host.firstName }}
+                {{ disponibilite.host.lastName }}
+                <div><a href=" {{ path('disponibilite_details', {'id': disponibilite.id}) }}">View details di</a></div>
+            </div>
+        {% endfor %}
+    {% else %}
+        Pas de dispo
+    {% endif %}
 </div>
 
 {% endblock %}

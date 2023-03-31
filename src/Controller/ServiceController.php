@@ -11,6 +11,7 @@ use App\Request\SearchRequest;
 use App\Repository\AddressRepository;
 use App\Repository\ServiceRepository;
 use App\Repository\CategorieRepository;
+use App\Repository\DisponibiliteRepository;
 use App\Repository\HostRepository;
 use App\Repository\UserRepository;
 use Doctrine\Persistence\ManagerRegistry;
@@ -85,7 +86,7 @@ class ServiceController extends AbstractController
 
     // page de recherche de services
     #[Route('/service/search', name: 'search_service')]
-    public function searchService(Request $request, ServiceRepository $repo): Response
+    public function searchService(Request $request, DisponibiliteRepository $repo): Response
     {
 
         $searchRequest = new SearchRequest();
@@ -98,16 +99,19 @@ class ServiceController extends AbstractController
             'form' => $form->handleRequest($request)];
 
         if ($form->isSubmitted()){
-            $services = $repo->findByFilters($searchRequest->getCategorie()?->getId(), $searchRequest->getFrom(), $searchRequest->getTo());
+
+            $disponibilites = $repo->findByFilters($searchRequest->getCategorie()?->getId(), $searchRequest->getFrom(), $searchRequest->getTo());
+            
             // dump($services[0]->getPictures()[0]->getName());
             // dd($services);
-            return $this->render('service/results.html.twig', [ 'results' => $services ]);
+            return $this->render('service/results.html.twig', [ 'results' => $disponibilites ,
+                                                                'categoryName' => $searchRequest->getCategorie()->getName()]);
         }
         return $this->render('service/search.html.twig', $vars);
     }
 
-    #[Route('/service/{id}', name: 'service_details')]
-    public function serviceDetails(ManagerRegistry $doctrine, ServiceRepository $repo, CategorieRepository $categRepo, AddressRepository $addressRepo, HostRepository $userRepo, Request $req){
+    #[Route('/service/disponibilite/{id}', name: 'disponibilite_details')]
+    public function serviceDetails(ManagerRegistry $doctrine, Request $req){
         
         // $id = $req->get('id');
         // $em = $doctrine->getManager();

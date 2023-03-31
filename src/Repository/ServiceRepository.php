@@ -40,50 +40,53 @@ class ServiceRepository extends ServiceEntityRepository
     }
 
 
-       /**
-    * @return Service[] Returns an array of Service objects
-    */
-   public function findByFilters($idCategorie, $from, $to): array
-   {
-       return $this->createQueryBuilder('s')
-           ->andWhere(':idCategorie is NULL or s.categorie = :idCategorie')
-           ->setParameter(':idCategorie', $idCategorie)
+    /**
+     * @return Service[] Returns an array of Service objects
+     */
+    public function findByFilters($idCategorie, $from, $to): array
+    {
+        $result = $this->createQueryBuilder('s')
+            ->andWhere(':idCategorie is NULL or s.categorie = :idCategorie')
+            ->setParameter(':idCategorie', $idCategorie)
 
-           ->Join('s.disponibilites', 'd')
-           ->andWhere(':to BETWEEN d.beginDateDispo AND d.endDateDispo')
-           ->setParameter('to', $to)
-           ->andWhere(':from BETWEEN d.beginDateDispo AND d.endDateDispo')
-           ->setParameter('from', $from)
+            // ici j'aimerais aussi faire en sorte que les deux dates puissent entre null mais pas juste une seule ?
+            ->Join('s.disponibilites', 'd')
+            ->andWhere(':to BETWEEN d.beginDateDispo AND d.endDateDispo')
+            ->setParameter('to', $to)
+            ->andWhere(':from BETWEEN d.beginDateDispo AND d.endDateDispo')
+            ->setParameter('from', $from)
 
-           ->orderBy('s.id', 'ASC')
-        //    ->setMaxResults()
-           ->getQuery()
-           ->getResult()
-       ;
-   }
+            ->orderBy('s.id', 'ASC')
+            //    ->setMaxResults()
+            ->getQuery()
+            ->getResult();
 
-//    /**
-//     * @return Service[] Returns an array of Service objects
-//     */
-//    public function findByExampleField($value): array
-//    {
-//        return $this->createQueryBuilder('s')
-//            ->andWhere('s.exampleField = :val')
-//            ->setParameter('val', $value)
-//            ->orderBy('s.id', 'ASC')
-//            ->setMaxResults(10)
-//            ->getQuery()
-//            ->getResult()
-//        ;
-//    }
 
-//    public function findOneBySomeField($value): ?Service
-//    {
-//        return $this->createQueryBuilder('s')
-//            ->andWhere('s.exampleField = :val')
-//            ->setParameter('val', $value)
-//            ->getQuery()
-//            ->getOneOrNullResult()
-//        ;
-//    }
+        return $result;
+    }
+
+    //    /**
+    //     * @return Service[] Returns an array of Service objects
+    //     */
+    //    public function findByExampleField($value): array
+    //    {
+    //        return $this->createQueryBuilder('s')
+    //            ->andWhere('s.exampleField = :val')
+    //            ->setParameter('val', $value)
+    //            ->orderBy('s.id', 'ASC')
+    //            ->setMaxResults(10)
+    //            ->getQuery()
+    //            ->getResult()
+    //        ;
+    //    }
+
+    //    public function findOneBySomeField($value): ?Service
+    //    {
+    //        return $this->createQueryBuilder('s')
+    //            ->andWhere('s.exampleField = :val')
+    //            ->setParameter('val', $value)
+    //            ->getQuery()
+    //            ->getOneOrNullResult()
+    //        ;
+    //    }
 }

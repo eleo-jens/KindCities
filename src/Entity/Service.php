@@ -33,7 +33,7 @@ class Service
     private ?Categorie $categorie = null;
 
     #[ORM\ManyToOne(inversedBy: 'services')]
-    #[ORM\JoinColumn(nullable: false)]
+    #[ORM\JoinColumn(nullable: true)]
     private ?Address $address = null;
 
     #[ORM\OneToMany(mappedBy: 'service', targetEntity: Picture::class, orphanRemoval: true, cascade:['persist', 'remove'])]
