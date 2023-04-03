@@ -88,7 +88,6 @@ class ServiceController extends AbstractController
     #[Route('/service/search', name: 'search_service')]
     public function searchService(Request $request, DisponibiliteRepository $repo): Response
     {
-
         $searchRequest = new SearchRequest();
 
         $form = $this->createForm(SearchType::class, $searchRequest, [
@@ -103,7 +102,7 @@ class ServiceController extends AbstractController
             $disponibilites = $repo->findByFilters($searchRequest->getCategorie()?->getId(), $searchRequest->getFrom(), $searchRequest->getTo());
             
             // dump($services[0]->getPictures()[0]->getName());
-            // dd($services);
+            // dd($disponibilites);
             return $this->render('service/results.html.twig', [ 'results' => $disponibilites ,
                                                                 'categoryName' => $searchRequest->getCategorie()->getName(),
                                                                 'fromDate' => $searchRequest->getFrom(), 

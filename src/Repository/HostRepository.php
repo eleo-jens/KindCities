@@ -39,6 +39,18 @@ class HostRepository extends ServiceEntityRepository
         }
     }
 
+
+    public function findOneByAddress($addressId): ?Host
+    {
+        return $this->createQueryBuilder('h')
+            ->innerJoin('h.addresses', 'a')
+            ->where('a.id = :addressId')
+            ->setParameter('addressId', $addressId)
+            ->getQuery()
+            ->getOneOrNullResult()
+        ;
+    }
+
 //    /**
 //     * @return Host[] Returns an array of Host objects
 //     */
@@ -63,4 +75,6 @@ class HostRepository extends ServiceEntityRepository
 //            ->getOneOrNullResult()
 //        ;
 //    }
+
+
 }

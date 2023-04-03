@@ -45,7 +45,7 @@ class ReservationController extends AbstractController
 
         // s'il existe une endDate nous sommes dans le cas d'un Accommodation avec un créneau
         $beginDate = new DateTime($req->get('beginDate'));
-        if ($req->get('endDate')){
+        if ($req->get('endDate') != null){
             $endDate = new DateTime($req->get('endDate'));
             $reservation->setEndDate($endDate);
         }
@@ -73,59 +73,29 @@ class ReservationController extends AbstractController
 
      public function updateDisponibilite(Disponibilite $dispo, Reservation $res, EntityManagerInterface $em)
     {
-        // $service = $em->getRepository(Service::class)->find(1);
-        // $host = $em->getRepository(Host::class)->find(1);
-        // $refugee = $em->getRepository(Refugee::class)->find(5);
-        
-        // créer une disponibilité
-        // $dispo = new Disponibilite();
-        // $dispo->setHost($reservation->getHost());
-        // $dispo->setService($reservation->getService());
-        // $dispo->setBeginDateDispo(new DateTime("01-01-2023"));
-        // $dispo->setEndDateDispo(new DateTime("07-01-2023"));
-        // $em->persist($dispo);
-        // $em->flush();
-        // $dispoOriginale = $em->getRepository(Disponibilite::class)->find(1);
-        
-        // créer une réservation 
-        // $res = new Reservation();
-        // $res->setHost($host);
-        // $res->setRefugee($refugee);
-        // $res->setDateReservation(new DateTime("22-10-2022"));
-        // $res->setCodeReservation("AB123");
-        // $res->setService($service);
-        // $res->setBeginDate(new DateTime("01-01-2023"));
-        // $res->setEndDate(new DateTime("04-01-2023"));
-        // $em->persist($res);
-        // $em->flush();
-
-        //TEST DE DIFFERENTES DATES
-        // $res->setBeginDate(new DateTime("03-01-2023"));
-        // $res->setEndDate(new DateTime("05-01-2023"));
-
-        // $res->setBeginDate(new DateTime("01-01-2023"));
-        // $res->setEndDate(new DateTime("07-01-2023"));
-
-        // $res->setBeginDate(new DateTime("04-01-2023"));
-        // $res->setEndDate(new DateTime("07-01-2023"));
-
         // gestion des créanaux de disponibilité après une réservation
-        // dates pour les dispos
+        // dates disponibles
         $debutDispo = $dispo->getBeginDateDispo();
         $finDispo = $dispo->getEndDateDispo();
-
+        
+        
         // dates pour la reservation qu'on veut faire
         $debutReservation = $res->getBeginDate();
         $finReservation = $res->getEndDate();
+        
+        // dump($debutReservation);
+        // dump($finReservation);
+        // dump(date_modify($debutReservation, '-1 day'));
+        // dd(date_modify($finReservation, '+2 day'));
 
         // On peut comparer DateTimes avec ==, < et >
         // https://thevaluable.dev/php-datetime-create-compare-format 
 
-        // 1. Toutes les dates pareils: créneau occupé totalement
+        // 1. Si les dates similaires: créneau occupé totalement
         // Partez de cette disponibilité:
         // dispo: 1/1/2030 - 10/1/2030
         // reservation: 1/1/2030 - 10/1/2030
-        // Rien ne plus disponible: effacer disponibilité (remove)
+        // Rien n'est plus disponible: effacer disponibilité (remove)
 
         if ($debutReservation == $debutDispo  && $finReservation == $finDispo) {
             // - Effacer disponibilité du tableau, tout es pris
@@ -147,8 +117,10 @@ class ReservationController extends AbstractController
             // Effacer la dispo originale
             if ($debutReservation > $debutDispo) {
                 $creneau1 = new Disponibilite();
-                $creneau1->setBeginDateDispo($debutDispo); // date original de dispo
+                // $creneau1->setBeginDateDispo($debutDispo); // date original de dispo
                 // $creneau1->setEndDateDispo($debutReservation->modify('-1 day')); // le prémier créneau finit le jour avant que la Reservation commence 
+                $debutReservation = date_modify($debutReservation, '-1 day');
+                // $creneau1->setEndDateDispo(date_modify($debutReservation, '-1 day')); // le prémier créneau finit le jour avant que la Reservation commence 
                 $creneau1->setEndDateDispo($debutReservation);
                 $creneau1->setService($dispo->getService());
                 $creneau1->setHost($dispo->getHost());
@@ -163,7 +135,9 @@ class ReservationController extends AbstractController
             if ($finReservation < $finDispo) {
                 $creneau2 = new Disponibilite();
                 // $creneau2->setBeginDateDispo($finReservation->modify('+1 day')); // dispo 1 jour après la fin de la réservation
-                $creneau2->setBeginDateDispo($finReservation);
+                $finReservation = date_modify($finReservation, '+2 day'); 
+                // $creneau1->setBeginDateDispo(date_modify($finReservation, '+1 day'));
+                // $creneau2->setBeginDateDispo($finReservation);
                 $creneau2->setEndDateDispo($finDispo); // dispo jusqu'à la fin de la disponibilité
                 $creneau2->setService($dispo->getService());
                 // dd($host);

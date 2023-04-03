@@ -43,19 +43,24 @@ class DisponibiliteRepository extends ServiceEntityRepository
     public function findByFilters($idCategorie, $from, $to): array
     {
 
+        // dump($idCategorie);
+        // dump($from);
+        // dump($to);
         $result = $this->createQueryBuilder('d')
             ->Join('d.service', 's')
             ->where(':idCategorie is NULL or s.categorie = :idCategorie')
             ->setParameter(':idCategorie', $idCategorie)
-            // ici j'aimerais aussi faire en sorte que les deux dates puissent entre null mais pas juste une seule ?
+
+            // ici j'aim''''erais aussi faire en sorte que les deux dates puissent entre null mais pas juste une seule ?
             ->andWhere(':from <= d.beginDateDispo AND :to >= d.endDateDispo')
-            ->setParameter('to', $to)
             ->setParameter('from', $from)
+            ->setParameter('to', $to)
             ->orderBy('d.beginDateDispo', 'ASC')
             //    ->setMaxResults()
             ->getQuery()
             ->getResult();
-
+        
+        // dd($result);
         return $result;
     }
 //    /**
