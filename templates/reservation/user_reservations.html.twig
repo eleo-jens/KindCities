@@ -1,0 +1,31 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Hello ReservationController!{% endblock %}
+
+{% block body %}
+
+<table class="table table-striped">
+  <thead>
+    <tr>
+      <th scope="col">#</th>
+      <th scope="col">Arrival Date</th>
+      <th scope="col">Departure Date</th>
+      <th scope="col">Service_id</th>
+      <th scope="col">Host_id</th>
+    </tr>
+  </thead>
+  <tbody>
+    {# {% let i  = 1 %} #}
+    {% for booking in bookings %}
+    <tr>
+      <th scope="row">1</th>
+      <td>{{ booking.beginDate | date("d/m/Y") }}</td>
+      <td>{{ booking.endDate | date("d/m/Y") }}</td>
+      <td>{{ booking.service.name }}</td>
+      <td>{{ booking.host.firstName}} {{booking.host.lastName}}</td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+
+{% endblock %}

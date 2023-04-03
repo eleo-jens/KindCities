@@ -68,6 +68,7 @@ class ServiceController extends AbstractController
     }
 
     // créer une nouvelle Address (AJAX)
+    #[IsGranted('ROLE_HOST')]
     #[Route ("serice/create/add/address", name: "add_address")]
     public function addAddressService(Request $ajaxRequest, ManagerRegistry $doctrine, SerializerInterface $serialiser){
         

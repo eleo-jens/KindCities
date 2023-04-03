@@ -39,7 +39,7 @@ class HostRepository extends ServiceEntityRepository
         }
     }
 
-
+    // Trouve un hote parmis la liste d'hotes possedant une adresse
     public function findOneByAddress($addressId): ?Host
     {
         return $this->createQueryBuilder('h')
