@@ -63,6 +63,20 @@ class DisponibiliteRepository extends ServiceEntityRepository
         // dd($result);
         return $result;
     }
+
+    public function findAllByService($idService): array
+   {
+       return $this->createQueryBuilder('d')
+           ->andWhere('d.service = :id')
+           ->setParameter('id', $idService)
+        //    ->orderBy('d.id', 'ASC')
+        //    ->setMaxResults(10)
+           ->getQuery()
+           ->getResult()
+       ;
+   }
+
+
 //    /**
 //     * @return Disponibilite[] Returns an array of Disponibilite objects
 //     */
