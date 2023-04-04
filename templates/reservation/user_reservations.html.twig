@@ -2,75 +2,107 @@
 
 {% block body %}
 
-{% if upcomingBookings|length > 0 %}
-<h1>Upcoming Reservations</h1>
-<table class="table table-striped">
-  <thead>
-    <tr>
-      <th scope="col">#</th>
-      <th scope="col">Arrival Date</th>
-      <th scope="col">Departure Date</th>
-      <th scope="col">Service</th>
-      <th scope="col">Host</th>
-      <th scope="col">Booking Code</th>
-      <th scope="col"></th>
-      <th scope="col"></th>
-    </tr>
-  </thead>
-  <tbody>
-    {# {% let i  = 1 %} #}
-    {% for upcomingBooking in upcomingBookings %}
-    <tr>
-      <th scope="row">1</th>
-      <td>{{ upcomingBooking.beginDate | date("d/m/Y") }}</td>
-      <td>{{ upcomingBooking.endDate | date("d/m/Y") }}</td>
-      <td><a href="{{ path('service_details', {'id': upcomingBooking.service.id }) }}">{{ upcomingBooking.service.name }}</a></td>
-      <td>{{ upcomingBooking.host.firstName}} {{upcomingBooking.host.lastName}}</td>
-      <td>{{ upcomingBooking.codeReservation }}</td>
-      <td><a href="#" class="btn btn-outline-info">Edit</a></td>
-      {# <td><a href="{{ path('edit_reservation' , {'id': booking.id })}}" class="btn btn-outline-info">Edit</a></td> #}
-      <td><a href="#" class="btn btn-danger">Cancel</a></td>
-      {# <td><a href="{{ path('delete_reservation', {'id': booking.id })}}" class="btn btn-danger">Cancel</a></td> #}
-    </tr>
-    {% endfor %}
-  </tbody>
-</table>
-{% endif %}
+	{% if upcomingBookings|length > 0 %}
+  	<div class="relative isolate px-6 my-6 pt-14 lg:px-8">
+		  <h1 class="text-3xl font-bold tracking-tight text-gray-900">Upcoming Reservations</h1>
+      <div class="flex flex-col">
+        <div class="overflow-x-auto sm:-mx-6 lg:-mx-8">
+          <div class="inline-block min-w-full py-2 sm:px-6 lg:px-8">
+            <div class="overflow-hidden">
+              <table class="min-w-full text-left text-sm font-light">
+                      <thead class="border-b font-medium dark:border-neutral-500">
+                        <tr>
+                          <th scope="col" class="px-6 py-4">#</th>
+                          <th scope="col" class="px-6 py-4">Arrival Date</th>
+                          <th scope="col" class="px-6 py-4">Departure Date</th>
+                          <th scope="col" class="px-6 py-4">Service</th>
+                          <th scope="col" class="px-6 py-4">Host</th>
+                          <th scope="col" class="px-6 py-4">Booking Code</th>
+                          <th scope="col" class="px-6 py-4"></th>
+                          <th scope="col" class="px-6 py-4"></th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {# {% let i  = 1 %} #}
+                        {% for upcomingBooking in upcomingBookings %}
+                          <tr class="border-b dark:border-neutral-500">
+                            <td class="whitespace-nowrap px-6 py-4 font-medium">1</th>
+                            <td class="whitespace-nowrap px-6 py-4">{{ upcomingBooking.beginDate | date("d/m/Y") }}</td>
+                            <td class="whitespace-nowrap px-6 py-4">{{ upcomingBooking.endDate | date("d/m/Y") }}</td>
+                            <td class="whitespace-nowrap px-6 py-4 font-medium">
+                              <a href="{{ path('service_details', {'id': upcomingBooking.service.id }) }}">{{ upcomingBooking.service.name }}</a>
+                            </td>
+                            <td class="whitespace-nowrap px-6 py-4">{{ upcomingBooking.host.firstName}}
+                              {{upcomingBooking.host.lastName}}</td>
+                            <td class="whitespace-nowrap px-6 py-4">{{ upcomingBooking.codeReservation }}</td>
+                            <td class="whitespace-nowrap px-6 py-4">
+                              <a href="#" class="text-primary transition duration-150 ease-in-out hover:text-primary-600 focus:text-primary-600 active:text-primary-700 dark:text-primary-400 dark:hover:text-primary-500 dark:focus:text-primary-500 dark:active:text-primary-600">Edit</a>
+                            </td>
+                            {# <td><a href="{{ path('edit_reservation' , {'id': booking.id })}}" class="btn btn-outline-info">Edit</a></td> #}
+                            <td class="whitespace-nowrap px-6 py-4">
+                              <a href="#" class="text-danger transition duration-150 ease-in-out hover:text-danger-600 focus:text-danger-600 active:text-danger-700">Cancel</a>
+                            </td>
+                            {# <td><a href="{{ path('delete_reservation', {'id': booking.id })}}" class="btn btn-danger">Cancel</a></td> #}
+                          </tr>
+                        {% endfor %}
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              </div>
+            </div>
+			</div>
+		{% endif %}
 
-{% if passedBookings|length > 0 %}
-  <h1>Passed Reservations</h1>
-  <table class="table table-striped">
-    <thead>
-      <tr>
-        <th scope="col">#</th>
-        <th scope="col">Arrival Date</th>
-        <th scope="col">Departure Date</th>
-        <th scope="col">Service</th>
-        <th scope="col">Host</th>
-        <th scope="col"></th>
-        <th scope="col"></th>
-      </tr>
-    </thead>
-    <tbody>
-      {# {% let i  = 1 %} #}
-      {% for passedBooking in passedBookings %}
-      <tr>
-        <th scope="row">1</th>
-        <td>{{ passedBooking.beginDate | date("d/m/Y") }}</td>
-        <td>{{ passedBooking.endDate | date("d/m/Y") }}</td>
-        <td><a href="{{ path('service_details', {'id': passedBooking.service.id }) }}">{{ passedBooking.service.name }}</a></td>
-        <td>{{ passedBooking.host.firstName}} {{passedBooking.host.lastName}}</td>
-        <td><a href="#" class="btn btn-outline-info">Leave a review to the Guest</a></td>
-        {# <td><a href="{{ path('edit_reservation' , {'id': booking.id })}}" class="btn btn-outline-info">Edit</a></td> #}
-      </tr>
-      {% endfor %}
-    </tbody>
-  </table>
-{% endif %}
+		{% if passedBookings|length > 0 %}
+			div class="relative isolate px-6 my-6 pt-14 lg:px-8">
+		  <h1 class="text-3xl font-bold tracking-tight text-gray-900">Upcoming Reservations</h1>
+      <div class="flex flex-col">
+        <div class="overflow-x-auto sm:-mx-6 lg:-mx-8">
+          <div class="inline-block min-w-full py-2 sm:px-6 lg:px-8">
+            <div class="overflow-hidden">
+              <table class="min-w-full text-left text-sm font-light">
+                      <thead class="border-b font-medium dark:border-neutral-500">
+					<tr>
+						<th scope="col" class="px-6 py-4">#</th>
+						<th scope="col" class="px-6 py-4">Arrival Date</th>
+						<th scope="col" class="px-6 py-4">Departure Date</th>
+						<th scope="col" class="px-6 py-4">Service</th>
+						<th scope="col" class="px-6 py-4">Host</th>
+						<th scope="col" class="px-6 py-4"></th>
+						<th scope="col" class="px-6 py-4"></th>
+					</tr>
+				</thead>
+				<tbody>
+					{# {% let i  = 1 %} #}
+					{% for passedBooking in passedBookings %}
+						<tr class="border-b dark:border-neutral-500">
+							<td class="whitespace-nowrap px-6 py-4 font-medium">1</th>
+							<td class="whitespace-nowrap px-6 py-4">{{ passedBooking.beginDate | date("d/m/Y") }}</td>
+							<td class="whitespace-nowrap px-6 py-4">{{ passedBooking.endDate | date("d/m/Y") }}</td>
+							<td class="whitespace-nowrap px-6 py-4 font-medium">
+								<a href="{{ path('service_details', {'id': passedBooking.service.id }) }}">{{ passedBooking.service.name }}</a>
+							</td>
+							<td class="whitespace-nowrap px-6 py-4">{{ passedBooking.host.firstName}}
+								{{passedBooking.host.lastName}}</td>
+							<td class="whitespace-nowrap px-6 py-4">
+								<a href="#" class="text-primary transition duration-150 ease-in-out hover:text-primary-600 focus:text-primary-600 active:text-primary-700 dark:text-primary-400 dark:hover:text-primary-500 dark:focus:text-primary-500 dark:active:text-primary-600">Leave a review to the Guest</a>
+							</td>
+							{# <td><a href="{{ path('edit_reservation' , {'id': booking.id })}}" class="btn btn-outline-info">Edit</a></td> #}
+						</tr>
+					{% endfor %}
+				</tbody>
+			</table>
+                        </div>
+                </div>
+              </div>
+            </div>
+			</div>
+		{% endif %}
 
-{% if passedBookings|length == 0 and upcomingBookings|length == 0 %}
-  <div>
-    <p>You haven't made any bookings yet.</p>
-  </div>
-{% endif %}
-{% endblock %}
+		{% if passedBookings|length == 0 and upcomingBookings|length == 0 %}
+			<div>
+				<p>You haven't made any bookings yet.</p>
+			</div>
+		{% endif %}
+	{% endblock %}

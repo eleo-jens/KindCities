@@ -1,12 +1,22 @@
 {% extends 'base.html.twig' %}
 
 {% block body %}
-<div class="example-wrapper">
-    <h1>Hello, {{ app.user.firstname }}</h1>
+	<div class="relative isolate px-6 my-6 pt-14 lg:px-8">
+		<h1 class="text-3xl font-bold tracking-tight text-gray-900">Hello,
+			<span class="text-blue-600">{{ app.user.firstname }}</span>
+		</h1>
 
-    <div><a href=" {{ path('create_service') }}">Offer a new service</a></div>
-    <div><a href=" {{ path('host_reservation') }}">See my reservations</a></div>
-    <div><a href="#">See my services</a></div>
-    <div><a href="#">Update my profile</a></div>
-</div>
+		<div>
+			<a href=" {{ path('create_service') }}">Offer a new service</a>
+		</div>
+		<div>
+			<a href=" {{ path('host_reservation') }}">See my reservations</a>
+		</div>
+		<div>
+			<a href="#">See my services</a>
+		</div>
+		<div>
+			<a href="{{ path('host_profile')}}">See my profile</a>
+		</div>
+	</div>
 {% endblock %}
