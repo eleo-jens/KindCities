@@ -33,7 +33,7 @@ class AddressServiceDisponibiliteFixtures extends Fixture implements DependentFi
             $service->setAddress($addressRandom);
             $manager->persist($service);
             $host = $manager->getRepository(Host::class)->findOneByAddress($addressRandom->getId());
-            for ($i=0 ; $i < 3 ; $i++){
+            for ($i=0 ; $i < 2 ; $i++){
                 $start = $faker->dateTimeThisYear();
                 $startModify = date_modify($start, '+2 days');
                 $end = $faker->dateTimeBetween($startModify, '+3 months');

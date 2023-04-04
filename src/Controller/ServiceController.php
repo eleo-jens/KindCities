@@ -28,12 +28,21 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 class ServiceController extends AbstractController
 {
     // Voir tous les services disponibles 
-    #[Route('/service', name: 'app_service')]
-    public function index(): Response
+    #[Route('/services', name: 'app_service')]
+    public function index(ServiceRepository $repo, DisponibiliteRepository $dispoRepo, ManagerRegistry $doctrine): Response
     {
-        return $this->render('service/index.html.twig', [
-            'controller_name' => 'ServiceController',
-        ]);
+        $em = $doctrine->getManager();
+
+        $services = $repo->findAllWithDisponibilites();
+
+        // createQuery ne fonctionne pas !
+        // $query = $em->createQuery('SELECT service, disponibilites FROM App\Entity\Service service '
+        //         . 'JOIN service.disponibilites disponibilites');
+        // dd($services);
+
+        $vars = [ 'services' => $services ];
+
+        return $this->render('service/index.html.twig', $vars);
     }
 
     // Page pour créer un service
@@ -69,7 +78,7 @@ class ServiceController extends AbstractController
 
     // créer une nouvelle Address (AJAX)
     #[IsGranted('ROLE_HOST')]
-    #[Route ("serice/create/add/address", name: "add_address")]
+    #[Route ("service/create/add/address", name: "add_address")]
     public function addAddressService(Request $ajaxRequest, ManagerRegistry $doctrine, SerializerInterface $serialiser){
         
         $address = $ajaxRequest->get('address');

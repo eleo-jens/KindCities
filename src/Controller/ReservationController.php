@@ -42,7 +42,7 @@ class ReservationController extends AbstractController
     #[Route('/reservation', name: 'create_reservation')]
     public function createReservation(EntityManagerInterface $em, DisponibiliteRepository $dispoRepo, Request $req): Response
     {
-        dd($req);
+        // dd($req);
 
         $faker = Factory::create();
 
@@ -52,7 +52,6 @@ class ReservationController extends AbstractController
         $reservation = new Reservation();
         $reservation->setDateReservation(new DateTime('now'));
 
-        // CA BUG ICI 
         // s'il existe une endDate nous sommes dans le cas d'un Accommodation avec un créneau
         $beginDate = new DateTime($req->get('beginDate'));
         if ($req->get('endDate') != null){
@@ -70,7 +69,7 @@ class ReservationController extends AbstractController
         $reservation->setHost($disponibilite->getHost());
         $reservation->setRefugee($this->getUser());
 
-        dd($reservation);
+        // dd($reservation);
 
         $em->persist($reservation);
         $em->flush();
