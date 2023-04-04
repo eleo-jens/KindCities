@@ -39,6 +39,18 @@ class ReservationRepository extends ServiceEntityRepository
         }
     }
 
+   public function findByUser($id): array
+   {
+       return $this->createQueryBuilder('r')
+           ->Where('r.refugee = :id')
+           ->setParameter('id', $id)
+        //    ->orderBy('r.beginDate', 'ASC')
+        //    ->setMaxResults(10)
+           ->getQuery()
+           ->getResult()
+       ;
+   }
+
 //    /**
 //     * @return Reservation[] Returns an array of Reservation objects
 //     */
