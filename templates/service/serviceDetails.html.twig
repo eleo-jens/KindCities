@@ -1,0 +1,34 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}KindCities | Services for Refugees{% endblock %}
+
+{% block body %}
+
+<h1>A {{ service.disponibilites[0].service.name }} by {{ service.disponibilites[0].host.firstName }} {{ service.disponibilites[0].host.lastName }}</h1>
+<h2>{{ service.categorie.name }}</h2>
+<p>{{ service.description }}</p>
+
+<input id="flatpickr" type="text" placeholder="Select Date.." data-categorie="{{ service.categorie.id }}" data-id="datetime" data-disponibilites-json="{{ disponibilitesJson }}">
+
+    {# A faire: extrenaliser le code javascript pour ne pas le mélanger à twig #}
+    {% block javascript %}
+
+    <script>
+        const myInput = document.getElementById("flatpickr");
+        const disponibilitesJson = document.getElementById("flatpickr").dataset.disponibilitesJson;
+        const idCategorie = document.getElementById("flatpickr").dataset.categorie;
+        console.log(idCategorie);
+        let jsonFP = {
+            dateFormat: "d-m-Y",
+            //minDate: "today",
+            enable: JSON.parse(disponibilitesJson),
+            inline: true,
+        };
+        if (idCategorie == 2){
+           jsonFP.mode = "range";
+        }
+        const fp = flatpickr(myInput, jsonFP);  
+    </script>
+
+    {% endblock %}
+{% endblock %}

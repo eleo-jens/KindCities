@@ -31,17 +31,37 @@ class ReservationController extends AbstractController
     {
         if($this->getUser()){
             $user = $this->getUser();
-            $reservations = $repo->findByUser($user->getId());
+            $upcomingReservations = $repo->findByUserUpcoming($user->getId());
+            $passedReservations = $repo->findByUserPassed($user->getId());
         }
 
-        $vars = ['bookings' => $reservations];
+        $vars = ['upcomingBookings' => $upcomingReservations,
+                 'passedBookings' => $passedReservations];
 
         return $this->render('reservation/user_reservations.html.twig', $vars);
+    }
+
+    #[IsGranted('ROLE_HOST')]
+    #[Route('/bookings', name: 'host_reservation')]
+    public function getReservationsByHost(ReservationRepository $repo, EntityManagerInterface $em): Response
+    {
+        if($this->getUser()){
+            $user = $this->getUser();
+            $upcomingReservations = $repo->findByHostUpcoming($user->getId());
+            $passedReservations = $repo->findByHostPassed($user->getId());
+        }
+
+        $vars = ['upcomingBookings' => $upcomingReservations,
+                 'passedBookings' => $passedReservations];
+
+        return $this->render('reservation/host_reservations.html.twig', $vars);
     }
 
     #[Route('/reservation', name: 'create_reservation')]
     public function createReservation(EntityManagerInterface $em, DisponibiliteRepository $dispoRepo, Request $req): Response
     {
+        // dd($req);
+
         $faker = Factory::create();
 
         $idCategorie = (int)$req->get('disponibilite'); 
@@ -67,6 +87,8 @@ class ReservationController extends AbstractController
         $reservation->setHost($disponibilite->getHost());
         $reservation->setRefugee($this->getUser());
 
+        // dd($reservation);
+
         $em->persist($reservation);
         $em->flush();
 
@@ -78,6 +100,19 @@ class ReservationController extends AbstractController
         return $this->redirectToRoute('user_reservation');
     }
 
+    #[Route('/reservation/cancel/{id}', name: 'delete_reservation')]
+    public function deleteReservation(ReservationRepository $repo, EntityManagerInterface $em, Request $req){
+        //Attention si la reservation est supprimée, il faut mettre à jour de nouveau les disponibilités
+        $id = $req->get("id");
+        $reservation = $repo->Find($id);
+        $em->remove($reservation);
+        $em->flush();
+    }
+
+    #[Route('/reservation/edit/{id}', name: 'edit_reservation')]
+    public function editReservation(Reservation $reservation, Request $req, EntityManagerInterface $em){
+        //Attention si la reservation est mise à jour, il faut mettre à jour de nouveau les disponibilités
+    }
 
      public function updateDisponibilite(Disponibilite $disponibilite, Reservation $reservation, EntityManagerInterface $em)
     {
