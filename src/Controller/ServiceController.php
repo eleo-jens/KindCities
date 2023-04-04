@@ -47,6 +47,33 @@ class ServiceController extends AbstractController
         return $this->render('service/index.html.twig', $vars);
     }
 
+        // Voir tous les services ajoutes par un host
+        #[IsGranted('ROLE_HOST')]
+        #[Route('/host/services', name: 'host_services')]
+        public function getHostServices(ServiceRepository $repo, DisponibiliteRepository $dispoRepo, ManagerRegistry $doctrine): Response
+        {
+            $em = $doctrine->getManager();
+
+            if($this->getUser() && $this->getUser()->getRoles()[0] == "ROLE_HOST"){
+                $id = $this->getUser()->getId();
+            }
+            
+            // dump($id);
+
+            $services = $repo->findAllByUser($id);
+    
+            // dd($services);
+    
+            // createQuery ne fonctionne pas !
+            // $query = $em->createQuery('SELECT service, disponibilites FROM App\Entity\Service service '
+            //         . 'JOIN service.disponibilites disponibilites');
+            // dd($services);
+    
+            $vars = ['services' => $services];
+    
+            return $this->render('service/hostServices.html.twig', $vars);
+        }
+
     // Page pour créer un service
     #[IsGranted('ROLE_HOST')]
     #[Route('/service/create/', name: 'create_service')]
@@ -69,7 +96,8 @@ class ServiceController extends AbstractController
             $em->flush();
 
             // ici il faudrait redirct vers la page dashboard de l'host à créer
-            return new Response("C'est ajouté");
+            // return new Response("C'est ajouté");
+            return $this->redirectToRoute('host_services');
         }
 
         $vars = [

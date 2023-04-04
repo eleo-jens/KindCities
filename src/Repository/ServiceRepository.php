@@ -61,6 +61,21 @@ class ServiceRepository extends ServiceEntityRepository
         return $result;
     }
 
+    public function findAllByUser($id): array
+    {
+        return $this->createQueryBuilder('s')
+            ->innerJoin('s.disponibilites', 'd')
+            ->where('d.host = :id')
+            ->setParameter(':id', $id)
+            // ->innerJoin('s.pictures', 'p')
+            // ->addSelect('p')
+         //    ->orderBy('d.id', 'ASC')
+         //    ->setMaxResults(10)
+            ->getQuery()
+            ->getResult()
+        ;
+    }
+
     public function findAllWithDisponibilites(): array
     {
         return $this->createQueryBuilder('s')
