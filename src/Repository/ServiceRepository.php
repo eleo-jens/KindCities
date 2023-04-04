@@ -66,10 +66,28 @@ class ServiceRepository extends ServiceEntityRepository
         return $this->createQueryBuilder('s')
             ->innerJoin('s.disponibilites', 'd')
             ->addSelect('d')
+            // ->innerJoin('s.pictures', 'p')
+            // ->addSelect('p')
          //    ->orderBy('d.id', 'ASC')
          //    ->setMaxResults(10)
             ->getQuery()
             ->getResult()
+        ;
+    }
+
+    public function findOneWithDisponibilites($id): ?Service
+    {
+        return $this->createQueryBuilder('s')
+            ->where('s = :id')
+            ->setParameter(':id', $id)
+            ->innerJoin('s.disponibilites', 'd')
+            ->addSelect('d')
+            // ->innerJoin('s.pictures', 'p')
+            // ->addSelect('p')
+         //    ->orderBy('d.id', 'ASC')
+         //    ->setMaxResults(10)
+            ->getQuery()
+            ->getOneOrNullResult()
         ;
     }
 

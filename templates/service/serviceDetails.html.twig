@@ -1,0 +1,40 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}KindCities | Services for Refugees{% endblock %}
+
+{% block body %}
+
+<h1>A {{ service.disponibilites[0].service.name }} by {{ service.disponibilites[0].host.firstName }} {{ service.disponibilites[0].host.lastName }}</h1>
+<h2>{{ service.categorie.name }}</h2>
+<p>{{ service.description }}</p>
+
+
+
+<input id="flatpickr" type="text" placeholder="Select Date.." data-id="datetime" data-disponibilites-json="{{ disponibilitesJson }}">
+
+    {% block javascript %}
+
+    <script>
+        const myInput = document.getElementById("flatpickr");
+        const disponibilitesJson = document.getElementById("flatpickr").dataset.disponibilitesJson;
+
+        console.log(disponibilitesJson);
+        
+        
+        const fp = flatpickr(myInput, {
+            dateFormat: "d-m-Y",
+            minDate: "today",
+            enable: [{"from":"30-01-2023","to":"02-05-2023"},{"from":"09-01-2023","to":"11-04-2023"},{"from":"13-04-2023","to":"13-06-2023"}] 
+
+        });  
+    </script>
+
+    {% endblock %}
+{% endblock %}
+
+
+
+            {# {{ tableau }},
+            {% if service.categorie.name == "Accommodation" %}
+            mode: range,
+            {% endif %} #}

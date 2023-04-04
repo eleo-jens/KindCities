@@ -35,12 +35,14 @@ class ServiceController extends AbstractController
 
         $services = $repo->findAllWithDisponibilites();
 
+        // dd($services);
+
         // createQuery ne fonctionne pas !
         // $query = $em->createQuery('SELECT service, disponibilites FROM App\Entity\Service service '
         //         . 'JOIN service.disponibilites disponibilites');
         // dd($services);
 
-        $vars = [ 'services' => $services ];
+        $vars = ['services' => $services];
 
         return $this->render('service/index.html.twig', $vars);
     }
@@ -53,13 +55,13 @@ class ServiceController extends AbstractController
         $service  = new Service();
         $form = $this->createForm(ServiceType::class, $service);
         // créer un form address sans handlerequest
-        $address = new Address(); 
+        $address = new Address();
         $formAddress = $this->createForm(AddressType::class, $address);
         $form->handleRequest($req);
         // && $form->isValid()
-        
-        if ($form->isSubmitted() ){
-            foreach($service->getDisponibilites() as $key => $dispo){
+
+        if ($form->isSubmitted()) {
+            foreach ($service->getDisponibilites() as $key => $dispo) {
                 $dispo->setHost($this->getUser());
             }
             $em = $doctrine->getManager();
@@ -70,17 +72,20 @@ class ServiceController extends AbstractController
             return new Response("C'est ajouté");
         }
 
-        $vars = ['form' => $form->createView(),
-                 'form_address' => $formAddress->createView()];
+        $vars = [
+            'form' => $form->createView(),
+            'form_address' => $formAddress->createView()
+        ];
 
         return $this->render('service/createService.html.twig', $vars);
     }
 
     // créer une nouvelle Address (AJAX)
     #[IsGranted('ROLE_HOST')]
-    #[Route ("service/create/add/address", name: "add_address")]
-    public function addAddressService(Request $ajaxRequest, ManagerRegistry $doctrine, SerializerInterface $serialiser){
-        
+    #[Route("service/create/add/address", name: "add_address")]
+    public function addAddressService(Request $ajaxRequest, ManagerRegistry $doctrine, SerializerInterface $serialiser)
+    {
+
         $address = $ajaxRequest->get('address');
         $newAddress = new Address($address);
         $newAddress->addHost($this->getUser());
@@ -89,8 +94,8 @@ class ServiceController extends AbstractController
         $em->flush();
 
         // retourner une reponse Json
-        $json = $serialiser->serialize($newAddress,'json',[AbstractNormalizer::IGNORED_ATTRIBUTES => ['hosts','services']]);
-        
+        $json = $serialiser->serialize($newAddress, 'json', [AbstractNormalizer::IGNORED_ATTRIBUTES => ['hosts', 'services']]);
+
         return new JsonResponse($json);
     }
 
@@ -105,33 +110,64 @@ class ServiceController extends AbstractController
         ]);
 
         $vars = [
-            'form' => $form->handleRequest($request)];
+            'form' => $form->handleRequest($request)
+        ];
 
-        if ($form->isSubmitted()){
+        if ($form->isSubmitted()) {
 
             $disponibilites = $repo->findByFilters($searchRequest->getCategorie()?->getId(), $searchRequest->getFrom(), $searchRequest->getTo());
-            
+
             // dump($services[0]->getPictures()[0]->getName());
             // dd($disponibilites);
-            return $this->render('service/results.html.twig', [ 'results' => $disponibilites ,
-                                                                'categoryName' => $searchRequest->getCategorie()->getName(),
-                                                                'fromDate' => $searchRequest->getFrom(), 
-                                                                'toDate' => $searchRequest->getFrom()]);
+            return $this->render('service/results.html.twig', [
+                'results' => $disponibilites,
+                'categoryName' => $searchRequest->getCategorie()->getName(),
+                'fromDate' => $searchRequest->getFrom(),
+                'toDate' => $searchRequest->getFrom()
+            ]);
         }
         return $this->render('service/search.html.twig', $vars);
     }
 
     #[Route('/service/disponibilite/{id}', name: 'disponibilite_details')]
-    public function serviceDetails(ManagerRegistry $doctrine, DisponibiliteRepository $repo, ServiceRepository $repoService, Request $req){
-        
+    public function disponibiliteDetails(ManagerRegistry $doctrine, DisponibiliteRepository $repo, ServiceRepository $repoService, Request $req)
+    {
+
         $id = $req->get('id');
         $disponibilite = $repo->find($id);
         $idService = $disponibilite->getService();
         $categorie = $repoService->find($idService)->getCategorie()->getName();
 
-        $vars = ['disponibilite' => $disponibilite, 
-                 'id' => $id,
-                 'categorie' => $categorie ];
-        return $this->render('service/details.html.twig', $vars);
+        $vars = [
+            'disponibilite' => $disponibilite,
+            'id' => $id,
+            'categorie' => $categorie
+        ];
+        return $this->render('service/disponibiliteDetails.html.twig', $vars);
+    }
+
+    #[Route('/service/{id}', name: 'service_details')]
+    public function serviceDetails(ServiceRepository $repo, Request $req)
+    {
+
+        $id = $req->get('id');
+        $service = $repo->findOneWithDisponibilites($id);
+
+        $disponibilites = $service->getDisponibilites();
+
+        $arrayDisposCalendar = [];
+        foreach ($disponibilites as $disponibilite) {
+            $arrayDisposCalendar[] = [
+                'from' => $disponibilite->getBeginDateDispo()->format('d-m-Y'),
+                'to' => $disponibilite->getEndDateDispo()->format('d-m-Y')
+            ];
+        }
+
+        $vars = [
+            'service' => $service,
+            'disponibilitesJson' => json_encode($arrayDisposCalendar)
+        ];
+
+        return $this->render('service/serviceDetails.html.twig', $vars);
     }
 }

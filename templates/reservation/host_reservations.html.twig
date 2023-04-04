@@ -13,7 +13,7 @@
       <th scope="col">Arrival Date</th>
       <th scope="col">Departure Date</th>
       <th scope="col">Service</th>
-      <th scope="col">Host</th>
+      <th scope="col">Guest</th>
       <th scope="col">Booking Code</th>
       <th scope="col"></th>
       <th scope="col"></th>
@@ -27,7 +27,7 @@
       <td>{{ upcomingBooking.beginDate | date("d/m/Y") }}</td>
       <td>{{ upcomingBooking.endDate | date("d/m/Y") }}</td>
       <td><a href="{{ path('service_details', {'id': upcomingBooking.service.id }) }}">{{ upcomingBooking.service.name }}</a></td>
-      <td>{{ upcomingBooking.host.firstName}} {{upcomingBooking.host.lastName}}</td>
+      <td>{{ upcomingBooking.refugee.firstName}} {{upcomingBooking.refugee.lastName}}</td>
       <td>{{ upcomingBooking.codeReservation }}</td>
       <td><a href="#" class="btn btn-outline-info">Edit</a></td>
       {# <td><a href="{{ path('edit_reservation' , {'id': booking.id })}}" class="btn btn-outline-info">Edit</a></td> #}
@@ -48,7 +48,7 @@
         <th scope="col">Arrival Date</th>
         <th scope="col">Departure Date</th>
         <th scope="col">Service</th>
-        <th scope="col">Host</th>
+        <th scope="col">Guest</th>
         <th scope="col"></th>
         <th scope="col"></th>
       </tr>
@@ -61,7 +61,7 @@
         <td>{{ passedBooking.beginDate | date("d/m/Y") }}</td>
         <td>{{ passedBooking.endDate | date("d/m/Y") }}</td>
         <td><a href="{{ path('service_details', {'id': passedBooking.service.id }) }}">{{ passedBooking.service.name }}</a></td>
-        <td>{{ passedBooking.host.firstName}} {{passedBooking.host.lastName}}</td>
+        <td>{{ passedBooking.refugee.firstName}} {{passedBooking.refugee.lastName}}</td>
         <td><a href="#" class="btn btn-outline-info">Edit</a></td>
         {# <td><a href="{{ path('edit_reservation' , {'id': booking.id })}}" class="btn btn-outline-info">Edit</a></td> #}
         <td><a href="#" class="btn btn-danger">Cancel</a></td>
@@ -74,7 +74,7 @@
 
 {% if passedBookings|length == 0 and upcomingBookings|length == 0 %}
   <div>
-    <p>You haven't made any bookings yet.</p>
+    <p>You haven't received any bookings yet.</p>
   </div>
 {% endif %}
 {% endblock %}
