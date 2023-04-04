@@ -32,19 +32,6 @@ class AddressServiceDisponibiliteFixtures extends Fixture implements DependentFi
             $addressRandom = $addresses[array_rand($addresses)];
             $service->setAddress($addressRandom);
             $manager->persist($service);
-            $host = $manager->getRepository(Host::class)->findOneByAddress($addressRandom->getId());
-            for ($i=0 ; $i < 2 ; $i++){
-                $start = $faker->dateTimeThisYear();
-                $startModify = date_modify($start, '+2 days');
-                $end = $faker->dateTimeBetween($startModify, '+3 months');
-                $disponibilite = new Disponibilite();
-                $disponibilite->setBeginDateDispo($start);
-                $disponibilite->setEndDateDispo($end);
-                $disponibilite->setService($service);
-                $disponibilite->setHost($host);
-                // dd($disponibilite);
-                $manager->persist($disponibilite);
-            }
         }
         $manager->flush();
     }

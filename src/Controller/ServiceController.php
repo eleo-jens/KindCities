@@ -168,6 +168,7 @@ class ServiceController extends AbstractController
             'disponibilitesJson' => json_encode($arrayDisposCalendar)
         ];
 
+        // dd($vars);
         return $this->render('service/serviceDetails.html.twig', $vars);
     }
 }

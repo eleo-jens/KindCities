@@ -62,10 +62,8 @@
         <td>{{ passedBooking.endDate | date("d/m/Y") }}</td>
         <td><a href="{{ path('service_details', {'id': passedBooking.service.id }) }}">{{ passedBooking.service.name }}</a></td>
         <td>{{ passedBooking.host.firstName}} {{passedBooking.host.lastName}}</td>
-        <td><a href="#" class="btn btn-outline-info">Edit</a></td>
+        <td><a href="#" class="btn btn-outline-info">Leave a review to the Guest</a></td>
         {# <td><a href="{{ path('edit_reservation' , {'id': booking.id })}}" class="btn btn-outline-info">Edit</a></td> #}
-        <td><a href="#" class="btn btn-danger">Cancel</a></td>
-        {# <td><a href="{{ path('delete_reservation', {'id': booking.id })}}" class="btn btn-danger">Cancel</a></td> #}
       </tr>
       {% endfor %}
     </tbody>
