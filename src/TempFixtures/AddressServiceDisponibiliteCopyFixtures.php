@@ -45,7 +45,6 @@ class AddressServiceDisponibiliteFixtures extends Fixture implements DependentFi
                 $disponibilite->setHost($host);
                 $manager->persist($disponibilite);
             }
-
         }
         $manager->flush();
     }
