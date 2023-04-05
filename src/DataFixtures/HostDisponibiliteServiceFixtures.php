@@ -2,6 +2,7 @@
 
 namespace App\DataFixtures;
 
+use DateTime;
 use Faker\Factory;
 use App\Entity\Host;
 use App\Entity\Service;
@@ -23,11 +24,16 @@ class HostDisponibiliteServiceFixtures extends Fixture implements DependentFixtu
         $services = $manager->getRepository(Service::class)->findAll();
 
         foreach ($services as $service) {
-            $start = $faker->dateTimeThisYear();
+            $start = new DateTime();
+            $start = $faker->dateTimeThisYear('+15 months');
+
             
             for ($i = 0; $i < 2; $i++) {
-                $end = $faker->dateTimeBetween($start, '+6 days');
-                
+                // $end = new DateTime();
+                // dump($start);
+                $end = $faker->dateTimeBetween($start, (clone $start)->modify('6 months'));
+                // dump($end);
+
                 $disponibilite = new Disponibilite();
                 $disponibilite->setBeginDateDispo($start);
                 $disponibilite->setEndDateDispo($end);
@@ -35,18 +41,17 @@ class HostDisponibiliteServiceFixtures extends Fixture implements DependentFixtu
                 $disponibilite->setService($service);
                 // fixer le host
                 $disponibilite->setHost($hosts[array_rand($hosts)]);
-                
-                $manager->persist($disponibilite);
-                
 
+                $manager->persist($disponibilite);
 
                 // dump($start);
                 // dump($end);
-                $start = $faker->dateTimeBetween($end, '+6 days');
+                $start = new DateTime();
+                $start = $faker->dateTimeBetween($end, (clone $end)->modify('6 months'));
                 // dump($start);
                 // dd($end);
                 // dd($disponibilite);
-            
+
             }
         }
         $manager->flush();
