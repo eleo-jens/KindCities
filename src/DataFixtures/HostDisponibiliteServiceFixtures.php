@@ -25,13 +25,14 @@ class HostDisponibiliteServiceFixtures extends Fixture implements DependentFixtu
 
         foreach ($services as $service) {
             $start = new DateTime();
-            $start = $faker->dateTimeThisYear('+15 months');
-
+            // $start = $faker->dateTimeThisYear('+15 months');
+            $start = $faker->dateTimeBetween('-22 months', '+10 months');
+            
             
             for ($i = 0; $i < 2; $i++) {
                 // $end = new DateTime();
                 // dump($start);
-                $end = $faker->dateTimeBetween($start, (clone $start)->modify('6 months'));
+                $end = $faker->dateTimeBetween($start, (clone $start)->modify('6 weeks'));
                 // dump($end);
 
                 $disponibilite = new Disponibilite();
@@ -47,7 +48,7 @@ class HostDisponibiliteServiceFixtures extends Fixture implements DependentFixtu
                 // dump($start);
                 // dump($end);
                 $start = new DateTime();
-                $start = $faker->dateTimeBetween($end, (clone $end)->modify('6 months'));
+                $start = $faker->dateTimeBetween($end, (clone $end)->modify('6 weeks'));
                 // dump($start);
                 // dd($end);
                 // dd($disponibilite);
