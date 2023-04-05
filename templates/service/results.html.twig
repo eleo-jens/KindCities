@@ -1,10 +1,68 @@
 {% extends 'base.html.twig' %}
 
 {% block body %}
-
-
-	{# {{ set nb = sizeof(results) }} #}
 	<div class="relative isolate px-6 my-6 pt-14 lg:px-8">
+		<h1 class="text-3xl font-bold tracking-tight text-gray-900">Your research for:
+			{{ categoryName }}
+			from
+			{{ fromDate | date("d/m/Y") }}
+			to
+			{{ fromDate | date("d/m/Y") }}</h1>
+
+		<div>
+			{% if results %}
+				{% for disponibilite in results %}
+					<div class="max-w-2xl px-8 py-4 my-6 bg-white rounded-lg shadow-md">
+						{# Problème pour récupérer mon image #}
+						{# <img src='/public/images/{{ service.pictures[0].name }}'> #}
+
+							<div class="flex items-center justify-between"> <span class="text-sm font-light text-gray-600">Available from
+								{{ disponibilite.beginDateDispo | date("d/m/Y") }}
+								to
+								{{ disponibilite.endDateDispo | date("d/m/Y")}}</span>
+							<a class="px-3 py-1 text-sm font-bold text-gray-100 transition-colors duration-300 transform bg-gray-600 rounded cursor-pointer hover:bg-gray-500" tabindex="0" role="button">{{ disponibilite.service.categorie.name }}</a>
+						</div>
+
+						<div class="mt-2">
+							<a href="#" class="text-xl font-bold text-gray-700 e hover:text-gray-600  hover:underline" tabindex="0" role="link">{{ disponibilite.service.name }}</a>
+							<p class="mt-2 text-gray-600 ">{{ disponibilite.service.description }}</p>
+						</div>
+
+						<div class="flex items-center justify-between mt-4">
+							<a href="{{ path('disponibilite_details', {'id': disponibilite.id}) }}" class="text-blue-600  hover:underline" tabindex="0" role="link">Booking</a>
+
+							<div class="flex items-center">
+								<img class="hidden object-cover w-10 h-10 mx-4 rounded-full sm:block" src="https://images.unsplash.com/photo-1502980426475-b83966705988?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=40&q=80" alt="avatar">
+								<a class="font-bold text-gray-700 cursor-pointer " tabindex="0" role="link">{{ disponibilite.host.firstName }}
+									{{ disponibilite.host.lastName }}</a>
+							</div>
+						</div>
+					</div>
+				{% endfor %}
+			{% else %}
+
+				<div class="max-w-2xl px-8 py-4 my-6 bg-white rounded-lg shadow-md">
+
+					<div class="mt-2">
+						<a href="#" class="text-xl font-bold text-gray-700 e hover:text-gray-600  hover:underline" tabindex="0" role="link">There are no
+							{{ categoryName }}
+							services availables from the dates you have selected ({{ fromDate | date("d/m/Y") }}
+							-
+							{{ fromDate | date("d/m/Y") }})</a>
+					</div>
+
+					<div class="flex items-center justify-between mt-4">
+						<a href="{{ path('search_service') }}" class="text-blue-600  hover:underline" tabindex="0" role="link">Make another search</a>
+					</div>
+				</div>
+			{% endif %}
+		</div>
+	</div>
+
+{% endblock %}
+
+{# nice look #}
+{# <div class="relative isolate px-6 my-6 pt-14 lg:px-8">
 		<h1 class="text-3xl font-bold tracking-tight text-gray-900">Your research for:
 			{{ categoryName }}
 			from
@@ -48,7 +106,7 @@
 		</div>
 	</div>
 
-{% endblock %}
+{% endblock %} #}
 {# 
 				<div class="flex justify-center">
 				<div
@@ -82,7 +140,7 @@
 				</div>
 				</div> #}
 
-					{# <div>
+{# <div>
 						Problème pour récupérer mon image
 						<img src='/public/images/{{ service.pictures[0].name }}'>
 						{{ disponibilite.service.name }}
