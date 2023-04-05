@@ -6,7 +6,7 @@
 <h2>{{ service.categorie.name }}</h2>
 <p>{{ service.description }}</p>
 
-<input id="flatpickr" type="text" placeholder="Select Date" data-categorie="{{ service.categorie.id }}" data-id="datetime" data-disponibilites-json="{{ disponibilitesJson }}">
+<input id="flatpickr" type="text" placeholder="Select Date.." data-categorie="{{ service.categorie.id }}" data-id="datetime" data-disponibilites-json="{{ disponibilitesJson }}">
 
     {# A faire: extrenaliser le code javascript pour ne pas le mélanger à twig #}
     {% block javascript %}

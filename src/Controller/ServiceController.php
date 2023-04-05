@@ -2,20 +2,19 @@
 
 namespace App\Controller;
 
-use DateTime;
 use App\Entity\Address;
 use App\Entity\Service;
 use App\Form\SearchType;
 use App\Form\AddressType;
 use App\Form\ServiceType;
 use App\Request\SearchRequest;
-use App\Repository\HostRepository;
-use App\Repository\UserRepository;
 use App\Repository\AddressRepository;
 use App\Repository\ServiceRepository;
 use App\Repository\CategorieRepository;
-use Doctrine\Persistence\ManagerRegistry;
 use App\Repository\DisponibiliteRepository;
+use App\Repository\HostRepository;
+use App\Repository\UserRepository;
+use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -36,6 +35,13 @@ class ServiceController extends AbstractController
 
         $services = $repo->findAllWithDisponibilites();
 
+        // dd($services);
+
+        // createQuery ne fonctionne pas !
+        // $query = $em->createQuery('SELECT service, disponibilites FROM App\Entity\Service service '
+        //         . 'JOIN service.disponibilites disponibilites');
+        // dd($services);
+
         $vars = ['services' => $services];
 
         return $this->render('service/index.html.twig', $vars);
@@ -51,9 +57,18 @@ class ServiceController extends AbstractController
             if($this->getUser() && $this->getUser()->getRoles()[0] == "ROLE_HOST"){
                 $id = $this->getUser()->getId();
             }
-    
-            $services = $repo->findAllByUser($id);
+            
+            // dump($id);
 
+            $services = $repo->findAllByUser($id);
+    
+            // dd($services);
+    
+            // createQuery ne fonctionne pas !
+            // $query = $em->createQuery('SELECT service, disponibilites FROM App\Entity\Service service '
+            //         . 'JOIN service.disponibilites disponibilites');
+            // dd($services);
+    
             $vars = ['services' => $services];
     
             return $this->render('service/hostServices.html.twig', $vars);
@@ -114,7 +129,7 @@ class ServiceController extends AbstractController
 
     // page de recherche de services
     #[Route('/service/search', name: 'search_service')]
-    public function searchService(Request $request, DisponibiliteRepository $repo, ServiceRepository $serviceRepo): Response
+    public function searchService(Request $request, DisponibiliteRepository $repo): Response
     {
         $searchRequest = new SearchRequest();
 
@@ -129,74 +144,19 @@ class ServiceController extends AbstractController
         if ($form->isSubmitted()) {
 
             $disponibilites = $repo->findByFilters($searchRequest->getCategorie()?->getId(), $searchRequest->getFrom(), $searchRequest->getTo());
-            // $servicesDispos = $serviceRepo->findByFilters($searchRequest->getCategorie()?->getId(), $searchRequest->getFrom(), $searchRequest->getTo());
-            // dump($servicesDispos);
-            dd($disponibilites);
 
+            // dump($services[0]->getPictures()[0]->getName());
+            // dd($disponibilites);
             return $this->render('service/results.html.twig', [
                 'results' => $disponibilites,
                 'categoryName' => $searchRequest->getCategorie()->getName(),
                 'fromDate' => $searchRequest->getFrom(),
-                'toDate' => $searchRequest->getTo()
+                'toDate' => $searchRequest->getFrom()
             ]);
         }
         return $this->render('service/search.html.twig', $vars);
     }
 
-    //FEATURE
-    // #[Route('/service/disponibilite/{id}', name: 'disponibilite_details')]
-    // public function disponibiliteDetails(ManagerRegistry $doctrine, DisponibiliteRepository $repo, ServiceRepository $repoService, Request $req)
-    // {
-
-    //     $id = $req->get('id');
-
-    //     $disponibilite = $repo->find($id);
-    //     $idService = $disponibilite->getService();
-    //     $categorie = $repoService->find($idService)->getCategorie()->getName();
-
-    //     $vars = [
-    //         'disponibilite' => $disponibilite,
-    //         'id' => $id,
-    //         'categorie' => $categorie
-    //     ];
-    //     return $this->render('service/disponibiliteDetails.html.twig', $vars);
-    // }
-
-    // #[Route('/service', name: 'service_details')]
-    // public function serviceDetails(ServiceRepository $repo, Request $req)
-    // {
-
-    //     $id = $req->get('id');
-    //     $fromDate = $req->get('from');
-    //     $toDate = $req->get('to');
-    //     $service = $repo->findOneWithDisponibilites($id);
-
-    //     $disponibilites = $service->getDisponibilites();
-
-    //     $arrayDisposCalendar = [];
-    //     foreach ($disponibilites as $disponibilite) {
-    //         $arrayDisposCalendar[] = [
-    //             'from' => $disponibilite->getBeginDateDispo()->format('d-m-Y'),
-    //             'to' => $disponibilite->getEndDateDispo()->format('d-m-Y')
-    //         ];
-    //     }
-
-    //     $searchDate = [(new DateTime($fromDate))->format('Y-m-d'), (new DateTime($toDate))->format('Y-m-d')];
-
-    //     $vars = [
-    //         'service' => $service,
-    //         'id' => $id,
-    //         'disponibilitesJson' => json_encode($arrayDisposCalendar),
-    //         'searchDate' => json_encode($searchDate),
-    //         'fromDate' => $fromDate,
-    //         'toDate' => $toDate,
-    //     ];
-
-    //     // dd($vars);
-    //     return $this->render('service/serviceDetails.html.twig', $vars);
-    // }
-
-    //COPY
     #[Route('/service/disponibilite/{id}', name: 'disponibilite_details')]
     public function disponibiliteDetails(ManagerRegistry $doctrine, DisponibiliteRepository $repo, ServiceRepository $repoService, Request $req)
     {

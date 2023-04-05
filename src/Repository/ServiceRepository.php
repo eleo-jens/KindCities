@@ -48,9 +48,8 @@ class ServiceRepository extends ServiceEntityRepository
         $result = $this->createQueryBuilder('s')
             ->andWhere(':idCategorie is NULL or s.categorie = :idCategorie')
             ->setParameter(':idCategorie', $idCategorie)
-            ->Join('s.disponibilites', 'd')
-            ->addSelect('d')
             // ici j'aimerais aussi faire en sorte que les deux dates puissent entre null mais pas juste une seule ?
+            ->Join('s.disponibilites', 'd')
             ->andWhere(':to BETWEEN d.beginDateDispo AND d.endDateDispo')
             ->setParameter('to', $to)
             ->andWhere(':from BETWEEN d.beginDateDispo AND d.endDateDispo')
