@@ -9,6 +9,7 @@ use App\Entity\Reservation;
 use App\Entity\Disponibilite;
 use App\DataFixtures\UserFixtures;
 use App\DataFixtures\ServiceFixtures;
+use App\DataFixtures\CategorieFixtures;
 use Doctrine\Persistence\ObjectManager;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use App\DataFixtures\HostDisponibiliteServiceFixtures;
@@ -71,6 +72,7 @@ class ReservationFixtures extends Fixture implements DependentFixtureInterface
     public function getDependencies()
     {
         return ([
+            CategorieFixtures::class,
             UserFixtures::class,
             ServiceFixtures::class,
             HostDisponibiliteServiceFixtures::class,
