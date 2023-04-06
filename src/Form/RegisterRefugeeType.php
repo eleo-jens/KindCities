@@ -25,7 +25,11 @@ class RegisterRefugeeType extends AbstractType
             ->add('lastName')
             ->add('firstName')
             ->add('phoneNumber', TelType::class)
-            ->add('birthDate', DateType::class)
+            ->add('birthDate', DateType::class, [
+                'widget' => 'single_text', 
+                // 'html5' => false, 
+                // 'attr' => ['class' => 'js-datepicker']
+            ])
             ->add('status')
             ->add('gender', 
                 ChoiceType::class,
@@ -36,7 +40,7 @@ class RegisterRefugeeType extends AbstractType
                             'Non-binary' => 'non-binary',
                             'Other' => 'other'
                         ],
-                        'expanded' => true,
+                        'expanded' => false,
                         'multiple' => false,
                         'mapped' => false
                     ],)

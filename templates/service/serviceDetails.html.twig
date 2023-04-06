@@ -1,0 +1,46 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+
+<div class="overflow-hidden bg-white shadow sm:rounded-lg my-12 mx-36">
+		<div class="px-4 py-5 sm:px-6">
+			<h2 class="text-3xl font-bold tracking-tight text-gray-900">{{ service.disponibilites[0].service.name }}</h2>
+            <h3 class="text-base font-semibold leading-6 text-gray-900">By
+				{{ service.disponibilites[0].host.firstName }} {{ service.disponibilites[0].host.lastName }}</h3>
+			<p class="mt-1 max-w-2xl text-sm text-gray-500">{{ service.description }}</p>
+		</div>
+        <div class="border-t border-gray-200">
+			<div class="px-36 py-10">
+                <input id="flatpickr" type="text" placeholder="Select Date.." data-categorie="{{ service.categorie.id }}" data-id="datetime" data-disponibilites-json="{{ disponibilitesJson }}">
+            </div>
+        </div>
+</div>
+
+{# <h1>A {{ service.disponibilites[0].service.name }} by {{ service.disponibilites[0].host.firstName }} {{ service.disponibilites[0].host.lastName }}</h1>
+<h2>{{ service.categorie.name }}</h2>
+<p>{{ service.description }}</p>
+
+<input id="flatpickr" type="text" placeholder="Select Date.." data-categorie="{{ service.categorie.id }}" data-id="datetime" data-disponibilites-json="{{ disponibilitesJson }}"> #}
+
+    {# A faire: extrenaliser le code javascript pour ne pas le mélanger à twig #}
+    {% block javascript %}
+
+    <script>
+        const myInput = document.getElementById("flatpickr");
+        const disponibilitesJson = document.getElementById("flatpickr").dataset.disponibilitesJson;
+        const idCategorie = document.getElementById("flatpickr").dataset.categorie;
+        console.log(idCategorie);
+        let jsonFP = {
+            dateFormat: "d-m-Y",
+            //minDate: "today",
+            enable: JSON.parse(disponibilitesJson),
+            inline: true,
+        };
+        if (idCategorie == 2){
+           jsonFP.mode = "range";
+        }
+        const fp = flatpickr(myInput, jsonFP);  
+    </script>
+
+    {% endblock %}
+{% endblock %}

@@ -1,75 +1,168 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}KindCities | Services for Refugees
-
-{% block stylesheets %}
-<style>
-	#form_address {
-		display: none;
-	}
-</style>
-
-{% endblock %}
-
-{% endblock %}
-
 {% block body %}
+<div class="isolate bg-white px-6 py-24 sm:py-32 lg:px-8">
+		<div class="absolute inset-x-0 top-[-10rem] -z-10 transform-gpu overflow-hidden blur-3xl sm:top-[-20rem]" aria-hidden="true">
+			<div class="relative left-1/2 -z-10 aspect-[1155/678] w-[36.125rem] max-w-none -translate-x-1/2 rotate-[30deg] bg-gradient-to-tr from-[#ff80b5] to-[#9089fc] opacity-30 sm:left-[calc(50%-40rem)] sm:w-[72.1875rem]" style="clip-path: polygon(74.1% 44.1%, 100% 61.6%, 97.5% 26.9%, 85.5% 0.1%, 80.7% 2%, 72.5% 32.5%, 60.2% 62.4%, 52.4% 68.1%, 47.5% 58.3%, 45.2% 34.5%, 27.5% 76.7%, 0.1% 64.9%, 17.9% 100%, 27.6% 76.8%, 76.1% 97.7%, 74.1% 44.1%)"></div>
+		</div>
+		<div class="mx-auto max-w-2xl text-center">
+			<h2 class="text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">Offer a new service</h2>
+			<p class="mt-2 text-lg leading-8 text-gray-600">Please fill the following information about your service.</p>
+		</div>
 
+		{{ form_start (form, {
+					'attr': {'id': 'form_service',
+							'class' : 'mx-auto mt-16 max-w-xl sm:mt-20'},
+					'action': path('create_service')			
+					}
+		)
+		}}
+		<div class="grid grid-cols-1 gap-x-8 gap-y-6 sm:grid-cols-2">
+			<div class="sm:col-span-2">
+				{{ form_row (form.name , { 'label_attr' : {'class' : "block text-sm font-semibold leading-6 text-gray-900"},
+                                                        'attr' : { 'class' : 'mt-2.5 block w-full rounded-md border-0 px-3.5 py-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6'}}) }}
+			</div>
+			<div class="sm:col-span-2">
+				{{ form_row (form.description, { 'label_attr' : {'class' : "block text-sm font-semibold leading-6 text-gray-900"},
+                                                        'attr' : { 'class' : 'mt-2.5 block w-full rounded-md border-0 px-3.5 py-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6'}}) }}
+			</div>
+			<div class="sm:col-span-2">
+				{{ form_row (form.categorie, { 'label_attr' : {'class' : "block text-sm font-semibold leading-6 text-gray-900"},
+                                                        'attr' : { 'class' : 'mt-2.5 block w-full rounded-md border-0 px-3.5 py-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6'}}) }}
+			</div>
+		
+		
+			{# Notation pour incruster un CollectionType pour les pictures #}
+			<div class="sm:col-span-2">
+				<ul class="pictures row" data-index="{{ form.pictures|length > 0 ? form.pictures|last.vars.name + 1 : 0 }}" data-prototype="{{ form_widget(form.pictures.vars.prototype, {'entry_options': {'attr': {'class': 'col-12 col-sm-6'}}})|e('html_attr') }}"></ul>
+			</div>
+			<div class="sm:col-span-2">
+				<button type="button" class="add_item_link font-medium text-indigo-600 hover:text-indigo-500" data-collection-holder-class="pictures">Add pictures</button>
+			</div>
+		
+			{# Dropdown list avec les adresses de l'host #}
+			<div class="sm:col-span-2">
+				{{ form_row (form.address, { 'label_attr' : {'class' : "block text-sm font-semibold leading-6 text-gray-900"},
+															'attr' : { 'class' : 'mt-2.5 block w-full rounded-md border-0 px-3.5 py-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6'}}) }}
+			</div>
+			<div id="addAddress" class="font-medium text-indigo-600 hover:text-indigo-500">Add a new address</div>
 
-	<h1>Offer a new service</h1>
-	<h2>Please fill the following information about your service.</h2>
-	
-	{{ form_start (form, 
-		{ 'action' : path('create_service')})
-	}}
-	{{ form_widget (form) }}
-	<button id="addAddress">Add a new address</button>
-	<div id="form_address">
-		{{ form_row (form_address.street) }}
-		{{ form_row (form_address.number) }}
-		{{ form_row (form_address.box) }}
-		<button id="sendAddress">Add</button>
-	</div>
-	<input type="submit" value="Post a new service">
+			{# Notation pour incruster un CollectionType pour les disponibilites #}
+			<div class="sm:col-span-2">
+				<ul class="disponibilites row" data-index="{{ form.disponibilites|length > 0 ? form.disponibilites|last.vars.name + 1 : 0 }}" data-prototype="{{ form_widget(form.disponibilites.vars.prototype, {'entry_options': {'attr': {'class': 'col-12 col-sm-6'}}})|e('html_attr') }}"></ul>
+			</div>
+			<div class="sm:col-span-2">
+				<button type="button" class="add_item_link btn btn-secondary mb-3" data-collection-holder-class="disponibilites">Add disponibilities</button>
+			</div>
+			{{ form_end (form, {render_rest:false}) }}
+		</div>
 
-	{{ form_end (form, {render_rest:false}) }}
-{% endblock %}
+			{# Second formulaire caché pour rajouter une adresse en plus #}
+			
+			{{ form_start (form_address, {'attr': {'id': 'form_address',
+							'class' : 'mx-auto mt-16 max-w-xl sm:mt-20'}}
+			) }}
+			<div class="grid grid-cols-1 gap-x-8 gap-y-6 sm:grid-cols-2">
+				<div class="sm:col-span-2">
+					{{ form_widget (form_address, { 'label_attr' : {'class' : "block text-sm font-semibold leading-6 text-gray-900"},
+																'attr' : { 'class' : 'mt-2.5 block w-full rounded-md border-0 px-3.5 py-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6'}}) }}
+				</div>
+				<div class="mt-10">
+					<button id="sendAddress" class="block w-full rounded-md bg-indigo-600 px-3.5 py-2.5 text-center text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600" data-route="{{ path ("add_address") }}">Add the new address</button>
+				</div>
+				{{ form_end (form_address) }}
+			</div>
+			<div class="mt-10">
+				<input id="submit_service" type="submit" value="Post my service" class="block w-full rounded-md bg-indigo-600 px-3.5 py-2.5 text-center text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">
+			</div>
+</div>
+	{% endblock %}
 
-{% block javascripts %}
+	{% block javascripts %}
 
-<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
-<script>
-	let addAddress = document.getElementById("addAddress"); 
-	let sendAddress = document.getElementById("sendAddress");
-	let formAddress = document.getElementById("formAddress");
+	<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+	<script>
 
-	console.log(addAddress);
-
-	addAddress.addEventListener("click", function (event) {
-		event.preventDefault();
-
-		console.log(document.getElementById("form_address"));
-		form_address.style.display = "block"; 
-
-		sendAddress.addEventListener("click", function (event) {
-			event.preventDefault();
-
-			// faire l'appel ajax ici 
-			axios({
-				url: '{{path ("add_address")}}',
-				method: 'POST',
-				headers: {},
-				data: new FormData(document.getElementById("form_address"))
-			})
-			.then(function (response){
-				console.log(response);
+		// https://uxsolutions.github.io/bootstrap-datepicker/?markup=range&format=&weekStart=&startDate=&endDate=&startView=0&minViewMode=0&maxViewMode=4&todayBtn=false&clearBtn=false&language=en&orientation=auto&multidate=&multidateSeparator=&keyboardNavigation=on&forceParse=on#sandbox
+			// https://symfony.com/doc/current/reference/forms/types/date.html 
+			{# $(document).ready(function() {
+		        // you may need to change this code if you are not using Bootstrap Datepicker
+		        $('.js-datepicker').datepicker({
+		            format: 'yyyy-mm-dd'
+		        });
+		    }); #}
+		
+		
+			let addAddress = document.getElementById("addAddress"); 
+			let sendAddress = document.getElementById("sendAddress");
+			let formAddress = document.getElementById("form_address");
+			
+			{# Affiche le formulaire d'ajout d'adresse ("formAddress") lors du click de "addAdress" #}
+			addAddress.addEventListener("click", function (event) {
+				event.preventDefault();
+				console.log(document.getElementById("form_address"));
+				formAddress.style.display = "block"; 
 			});
-
-			// vider le form
-			// cacher le form
-		} );
-	});
-
-</script>
-
-{% endblock %}
+		
+			{# Gestion AJAX de l'ajout d'une nouvelle adresse / Mise à jour du select avec l'adresse ajoutée #}
+			sendAddress.addEventListener("click", function (event) {
+					event.preventDefault();
+					console.log (event.target);
+					// faire l'appel ajax ici 
+					axios({
+						url: event.target.dataset.route,
+						method: 'POST',
+						headers: { 'Content-Type': 'multipart/form-data' },
+						data: new FormData(document.getElementById("form_address"))
+					})
+					.then(function (response){
+						console.log(response.data);
+						address = JSON.parse(response.data); 
+						console.log(address);
+						console.log(address.id)
+						
+						const newOption = document.createElement('option');
+						const optionText = document.createTextNode(`${address.number} ${address.street}, boite ${address.box}, ${address.city}, ${address.state}, ${address.country}`);
+						newOption.appendChild(optionText);
+						newOption.setAttribute(`value`, `${address.id}`);
+						newOption.setAttribute('selected', 'selected');
+		
+						const select = document.querySelector('select#service_address');
+						select.appendChild(newOption);
+					});
+					formAddress.reset();
+					formAddress.style.display = "none"; 
+			});
+		
+			{# Submit du formulaire de service lors du click (car l'input est en dehors du formulaire de service) #}
+			submit_service.addEventListener("click", function (event) {
+				form_service.submit();
+			});	
+		
+			{# code pour l'ajout d'une disponibilité qui est un CollectionType #}
+			const addFormToCollection = (e) => {
+				const collectionHolder = document.querySelector('.' + e.currentTarget.dataset.collectionHolderClass);
+		
+				const item = document.createElement('li');
+		
+				item.innerHTML = collectionHolder
+					.dataset
+					.prototype
+					.replace(
+					/__name__/g,
+					collectionHolder.dataset.index
+					);
+		
+				collectionHolder.appendChild(item);
+		
+				collectionHolder.dataset.index++;
+			};
+		
+			{# code pour l'ajout d'une disponibilité qui est un CollectionType #}
+			document.querySelectorAll('.add_item_link')
+				.forEach(btn => {
+					btn.addEventListener("click", addFormToCollection)
+				});
+		</script>
+		
+		{% endblock %}

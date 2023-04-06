@@ -8,15 +8,31 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class HomeController extends AbstractController
 {
+    #[Route('/', name: 'app')]
+    public function homePage(): Response
+    {
+        return $this->render('home/index.html.twig');
+    }
+
     #[Route('/home', name: 'app_home')]
     public function index(): Response
     {
-        // dd($this->getUser()->getRoles()[0]);
+        return $this->render('home/index.html.twig');
+    }
+
+    #[Route('/auth/role', name: 'app_auth_role')]
+    public function redirectRoles(): Response {
         if ($this->getUser()->getRoles()[0] == "ROLE_HOST"){
             return $this->redirectToRoute('app_host');
         }
         else if ($this->getUser()->getRoles()[0] == "ROLE_REFUGEE"){
             return $this->redirectToRoute('app_refugee');
         }; 
+    }
+
+    #[Route('/about', name: 'app_about')]
+    public function about(): Response
+    {
+        return $this->render('home/about.html.twig');
     }
 }

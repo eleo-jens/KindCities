@@ -23,7 +23,11 @@ class RegisterHostType extends AbstractType
         ->add('lastName')
         ->add('firstName')
         ->add('phoneNumber', TelType::class)
-        ->add('birthDate', DateType::class)
+        ->add('birthDate', DateType::class, [
+            'widget' => 'single_text', 
+            // 'html5' => false, 
+            // 'attr' => ['class' => 'js-datepicker']
+        ])
         ->add('nationalNumberId')
         ->add('gender', 
         ChoiceType::class,
@@ -34,9 +38,9 @@ class RegisterHostType extends AbstractType
                     'Non-binary' => 'non-binary',
                     'Other' => 'other'
                 ],
-                'expanded' => true,
+                'expanded' => false,
                 'multiple' => false,
-                'mapped' => false
+                'mapped' => false,
             ],)
         ->add('plainPassword', PasswordType::class, [
             // instead of being set onto the object directly,

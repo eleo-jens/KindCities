@@ -22,24 +22,28 @@ class Service
     #[ORM\Column(type: Types::TEXT)]
     private ?string $description = null;
 
-    #[ORM\OneToMany(mappedBy: 'service', targetEntity: Disponibilite::class, orphanRemoval: true)]
+    #[ORM\OneToMany(mappedBy: 'service', targetEntity: Disponibilite::class, orphanRemoval: true, cascade: ['persist'])]
     private Collection $disponibilites;
-
-    #[ORM\OneToMany(mappedBy: 'service', targetEntity: DetailReservation::class, orphanRemoval: true)]
-    private Collection $DetailsReservation;
 
     #[ORM\ManyToOne(inversedBy: 'services')]
     #[ORM\JoinColumn(nullable: true)]
     private ?Categorie $categorie = null;
 
     #[ORM\ManyToOne(inversedBy: 'services')]
-    #[ORM\JoinColumn(nullable: false)]
+    #[ORM\JoinColumn(nullable: true)]
     private ?Address $address = null;
+
+    #[ORM\OneToMany(mappedBy: 'service', targetEntity: Picture::class, orphanRemoval: true, cascade:['persist', 'remove'])]
+    private Collection $pictures;
+
+    #[ORM\OneToMany(mappedBy: 'service', targetEntity: Reservation::class, orphanRemoval: true)]
+    private Collection $reservations;
 
     public function __construct()
     {
         $this->disponibilites = new ArrayCollection();
-        $this->DetailsReservation = new ArrayCollection();
+        $this->pictures = new ArrayCollection();
+        $this->reservations = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -101,36 +105,6 @@ class Service
         return $this;
     }
 
-    /**
-     * @return Collection<int, DetailReservation>
-     */
-    public function getDetailsReservation(): Collection
-    {
-        return $this->DetailsReservation;
-    }
-
-    public function addDetailsReservation(DetailReservation $detailsReservation): self
-    {
-        if (!$this->DetailsReservation->contains($detailsReservation)) {
-            $this->DetailsReservation->add($detailsReservation);
-            $detailsReservation->setService($this);
-        }
-
-        return $this;
-    }
-
-    public function removeDetailsReservation(DetailReservation $detailsReservation): self
-    {
-        if ($this->DetailsReservation->removeElement($detailsReservation)) {
-            // set the owning side to null (unless already changed)
-            if ($detailsReservation->getService() === $this) {
-                $detailsReservation->setService(null);
-            }
-        }
-
-        return $this;
-    }
-
     public function getCategorie(): ?Categorie
     {
         return $this->categorie;
@@ -151,6 +125,66 @@ class Service
     public function setAddress(?Address $address): self
     {
         $this->address = $address;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Picture>
+     */
+    public function getPictures(): Collection
+    {
+        return $this->pictures;
+    }
+
+    public function addPicture(Picture $picture): self
+    {
+        if (!$this->pictures->contains($picture)) {
+            $this->pictures->add($picture);
+            $picture->setService($this);
+        }
+
+        return $this;
+    }
+
+    public function removePicture(Picture $picture): self
+    {
+        if ($this->pictures->removeElement($picture)) {
+            // set the owning side to null (unless already changed)
+            if ($picture->getService() === $this) {
+                $picture->setService(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Reservation>
+     */
+    public function getReservations(): Collection
+    {
+        return $this->reservations;
+    }
+
+    public function addReservation(Reservation $reservation): self
+    {
+        if (!$this->reservations->contains($reservation)) {
+            $this->reservations->add($reservation);
+            $reservation->setService($this);
+        }
+
+        return $this;
+    }
+
+    public function removeReservation(Reservation $reservation): self
+    {
+        if ($this->reservations->removeElement($reservation)) {
+            // set the owning side to null (unless already changed)
+            if ($reservation->getService() === $this) {
+                $reservation->setService(null);
+            }
+        }
 
         return $this;
     }

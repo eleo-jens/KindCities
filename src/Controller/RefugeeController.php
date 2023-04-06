@@ -15,4 +15,12 @@ class RefugeeController extends AbstractController
             'controller_name' => 'RefugeeController',
         ]);
     }
+
+    #[Route('/refugee/profile', name: 'refugee_profile')]
+    public function getProfile(): Response
+    {
+        return $this->render('refugee/profile.html.twig', [
+            'controller_name' => 'HostController',
+        ]);
+    }
 }

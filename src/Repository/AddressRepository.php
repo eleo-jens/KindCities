@@ -39,6 +39,10 @@ class AddressRepository extends ServiceEntityRepository
         }
     }
 
+    public function getAddressesByUserQB (int $hostId){
+        return $this->createQueryBuilder('a')->innerJoin('a.hosts', 'h')->where("h.id = $hostId");
+    }
+
 //    /**
 //     * @return Address[] Returns an array of Address objects
 //     */

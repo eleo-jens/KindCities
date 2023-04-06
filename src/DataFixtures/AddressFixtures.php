@@ -2,8 +2,8 @@
 
 namespace App\DataFixtures;
 
-use App\Entity\Address;
 use Faker\Factory;
+use App\Entity\Address;
 use Doctrine\Persistence\ObjectManager;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 
@@ -15,7 +15,7 @@ class AddressFixtures extends Fixture
 
         for ($i = 0; $i < 6; $i++) {
             $address = new Address();
-            $address->setStreet($faker->streetAddress());
+            $address->setStreet($faker->streetName());
             $address->setNumber($faker->buildingNumber());
             $address->setBox($faker->buildingNumber());
             $address->setCity($faker->city());

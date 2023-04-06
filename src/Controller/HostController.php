@@ -15,4 +15,12 @@ class HostController extends AbstractController
             'controller_name' => 'HostController',
         ]);
     }
+
+    #[Route('/host/profile', name: 'host_profile')]
+    public function getProfile(): Response
+    {
+        return $this->render('host/profile.html.twig', [
+            'controller_name' => 'HostController',
+        ]);
+    }
 }

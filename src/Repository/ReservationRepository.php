@@ -39,6 +39,72 @@ class ReservationRepository extends ServiceEntityRepository
         }
     }
 
+   public function findByUser($id): array
+   {
+       return $this->createQueryBuilder('r')
+           ->Where('r.refugee = :id')
+           ->setParameter('id', $id)
+        //    ->orderBy('r.beginDate', 'ASC')
+        //    ->setMaxResults(10)
+           ->getQuery()
+           ->getResult()
+       ;
+   }
+
+   public function findByUserUpcoming($id): array
+   {
+            return $this->createQueryBuilder('r')
+            ->Where('r.refugee = :id')
+            ->andWhere('r.beginDate >= :today')
+            ->setParameter('id', $id)
+            ->setParameter('today', new \DateTime())  
+                //    ->orderBy('r.beginDate', 'ASC')
+                //    ->setMaxResults(10)
+           ->getQuery()
+           ->getResult()
+       ;
+   }
+
+   public function findByUserPassed($id): array
+   {
+        return $this->createQueryBuilder('r')
+        ->Where('r.refugee = :id')
+        ->andWhere('r.endDate < :today')
+        ->setParameter('id', $id)
+        ->setParameter('today', new \DateTime())  
+            //    ->orderBy('r.beginDate', 'ASC')
+            //    ->setMaxResults(10)
+        ->getQuery()
+        ->getResult();
+   }
+
+   public function findByHostUpcoming($id): array
+   {
+            return $this->createQueryBuilder('r')
+            ->Where('r.host = :id')
+            ->andWhere('r.beginDate >= :today')
+            ->setParameter('id', $id)
+            ->setParameter('today', new \DateTime())  
+                //    ->orderBy('r.beginDate', 'ASC')
+                //    ->setMaxResults(10)
+           ->getQuery()
+           ->getResult()
+       ;
+   }
+
+   public function findByHostPassed($id): array
+   {
+        return $this->createQueryBuilder('r')
+        ->Where('r.host = :id')
+        ->andWhere('r.endDate < :today')
+        ->setParameter('id', $id)
+        ->setParameter('today', new \DateTime())  
+            //    ->orderBy('r.beginDate', 'ASC')
+            //    ->setMaxResults(10)
+        ->getQuery()
+        ->getResult();
+   }
+
 //    /**
 //     * @return Reservation[] Returns an array of Reservation objects
 //     */

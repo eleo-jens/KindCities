@@ -39,28 +39,95 @@ class ServiceRepository extends ServiceEntityRepository
         }
     }
 
-//    /**
-//     * @return Service[] Returns an array of Service objects
-//     */
-//    public function findByExampleField($value): array
-//    {
-//        return $this->createQueryBuilder('s')
-//            ->andWhere('s.exampleField = :val')
-//            ->setParameter('val', $value)
-//            ->orderBy('s.id', 'ASC')
-//            ->setMaxResults(10)
-//            ->getQuery()
-//            ->getResult()
-//        ;
-//    }
 
-//    public function findOneBySomeField($value): ?Service
-//    {
-//        return $this->createQueryBuilder('s')
-//            ->andWhere('s.exampleField = :val')
-//            ->setParameter('val', $value)
-//            ->getQuery()
-//            ->getOneOrNullResult()
-//        ;
-//    }
+    /**
+     * @return Service[] Returns an array of Service objects
+     */
+    public function findByFilters($idCategorie, $from, $to): array
+    {
+        $result = $this->createQueryBuilder('s')
+            ->andWhere(':idCategorie is NULL or s.categorie = :idCategorie')
+            ->setParameter(':idCategorie', $idCategorie)
+            // ici j'aimerais aussi faire en sorte que les deux dates puissent entre null mais pas juste une seule ?
+            ->Join('s.disponibilites', 'd')
+            ->andWhere(':to BETWEEN d.beginDateDispo AND d.endDateDispo')
+            ->setParameter('to', $to)
+            ->andWhere(':from BETWEEN d.beginDateDispo AND d.endDateDispo')
+            ->setParameter('from', $from)
+            ->orderBy('s.id', 'ASC')
+            ->getQuery()
+            ->getResult();
+
+        return $result;
+    }
+
+    public function findAllByUser($id): array
+    {
+        return $this->createQueryBuilder('s')
+            ->innerJoin('s.disponibilites', 'd')
+            ->where('d.host = :id')
+            ->setParameter(':id', $id)
+            // ->innerJoin('s.pictures', 'p')
+            // ->addSelect('p')
+         //    ->orderBy('d.id', 'ASC')
+         //    ->setMaxResults(10)
+            ->getQuery()
+            ->getResult()
+        ;
+    }
+
+    public function findAllWithDisponibilites(): array
+    {
+        return $this->createQueryBuilder('s')
+            ->innerJoin('s.disponibilites', 'd')
+            ->addSelect('d')
+            // ->innerJoin('s.pictures', 'p')
+            // ->addSelect('p')
+         //    ->orderBy('d.id', 'ASC')
+         //    ->setMaxResults(10)
+            ->getQuery()
+            ->getResult()
+        ;
+    }
+
+    public function findOneWithDisponibilites($id): ?Service
+    {
+        return $this->createQueryBuilder('s')
+            ->where('s = :id')
+            ->setParameter(':id', $id)
+            ->innerJoin('s.disponibilites', 'd')
+            ->addSelect('d')
+            // ->innerJoin('s.pictures', 'p')
+            // ->addSelect('p')
+         //    ->orderBy('d.id', 'ASC')
+         //    ->setMaxResults(10)
+            ->getQuery()
+            ->getOneOrNullResult()
+        ;
+    }
+
+    //    /**
+    //     * @return Service[] Returns an array of Service objects
+    //     */
+    //    public function findByExampleField($value): array
+    //    {
+    //        return $this->createQueryBuilder('s')
+    //            ->andWhere('s.exampleField = :val')
+    //            ->setParameter('val', $value)
+    //            ->orderBy('s.id', 'ASC')
+    //            ->setMaxResults(10)
+    //            ->getQuery()
+    //            ->getResult()
+    //        ;
+    //    }
+
+    //    public function findOneBySomeField($value): ?Service
+    //    {
+    //        return $this->createQueryBuilder('s')
+    //            ->andWhere('s.exampleField = :val')
+    //            ->setParameter('val', $value)
+    //            ->getQuery()
+    //            ->getOneOrNullResult()
+    //        ;
+    //    }
 }
